@@ -1,6 +1,6 @@
 
 /*
- * Database Utility Routes
+ * Database mdoel
  */
 module.exports = Database;
 

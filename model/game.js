@@ -5,20 +5,38 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId;
+    ObjectId = Schema.ObjectId,
+    defaultObjects = require('./../model/defaultObjects'),
+    Meme = require('./meme'),
+    Locale = require('./locale');
 
 var GameSchema = new Schema( {
     owner:      { type:ObjectId, required:true },
     settings:   Object,
-    state:      String
+    state:      String,
+    memes:      [Meme.schema],
+    locales:    [Locale.schema]
 });
 
 
-GameSchema.statics.factory = function( settings, characters, ownerId, cb) {
+GameSchema.statics.factory = function( settings, meme, ownerId, cb) {
     var result = new Game({owner:ownerId,
                            settings:settings,
                            state:'initial'
                           });
+    
+    defaultObjects.availableMemes.forEach( function(name) {
+        var m = Meme.factory(name);
+        if(meme == name)
+            result.memes.unshift( m);      // player's meme is always the zeroeth element
+        else
+            result.memes.push( m);
+    });
+    
+    defaultObjects.availableLocales.forEach( function(name) {
+        result.locales.push(Locale.factory(name));
+    });
+
     result.update(cb);
 };
 

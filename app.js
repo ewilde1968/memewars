@@ -7,6 +7,7 @@ var express = require('express'),
     Database = require('./model/database'),
     routes = require('./routes'),
     user = require('./routes/user'),
+    game = require('./routes/game'),
     http = require('http'),
     path = require('path');
 
@@ -37,6 +38,10 @@ app.get('/user/new', user.newUser);
 app.post('/user/new', user.createUser);
 app.get('/user/:userid', user.ensureSignedIn, user.home);
 app.post('/user/:userid', user.ensureSignedIn, user.update);
+app.get('/user/:userid/game/new', user.ensureSignedIn, game.newGame);
+app.post('/user/:userid/game/new', user.ensureSignedIn, game.createGame);
+app.get('/user/:userid/game/:gameid', user.ensureSignedIn, game.home);
+app.post('/user/:userid/game/:gameid', user.ensureSignedIn, game.update);
 
 // setup DB
 app.database = new Database();
