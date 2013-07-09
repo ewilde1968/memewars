@@ -7,15 +7,14 @@ block content
     a(href=cancelUrl)
       button.leftNavButton Cancel
     a#startbutton
-      button.rightNavButton(disabled=true) Start
+      button.rightNavButton Start
   formUrl = '/user/' + accountId + '/game/new'
   form( action=formUrl, method="POST")
     fieldset
-      ul.multiselectlist
+      label(for="meme") Meme to play
+      select(name="meme", id="memeselect")
         each meme in memes
-          li.multiselectitem
-            input(name=meme, type="checkbox")
-            label(for=meme) #{meme}
+          option(value=meme) #{meme}
       label(for="difficulty") Difficulty
       select(name="difficulty", id="diffulty")
         option(value="Tutorial") Tutorial
@@ -25,12 +24,7 @@ block content
 
   script.
     $(document).ready( function() {
-        $('#startbutton').click( function() {$('form').submit();});
-        
-        $("form input:checkbox").click( function() {
-            if( $("input:checked").length > 0)
-                $('#startbutton button').attr("disabled",false);
-            else
-                $('#startbutton button').attr("disabled",true);
+        $('#startbutton').click( function() {
+            $('form').submit();
         });
     });

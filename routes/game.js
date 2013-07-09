@@ -8,8 +8,9 @@ var Game = require('./../model/game'),
 
 //app.post('/user/:userid/game/new', user.ensureSignedIn, game.createGame);
 exports.createGame = function( req, res, next) {
-    Game.factory({difficulty:req.body.difficulty},
-                 req.body.meme,
+    Game.factory({difficulty:req.body.difficulty,
+                  meme:req.body.meme
+                 },
                  req.session.userId,
                  function(err, game) {
                      if(err) return next(err);

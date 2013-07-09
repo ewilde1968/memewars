@@ -19,7 +19,7 @@ var GameSchema = new Schema( {
 });
 
 
-GameSchema.statics.factory = function( settings, meme, ownerId, cb) {
+GameSchema.statics.factory = function( settings, ownerId, cb) {
     var result = new Game({owner:ownerId,
                            settings:settings,
                            state:'initial'
@@ -27,7 +27,7 @@ GameSchema.statics.factory = function( settings, meme, ownerId, cb) {
     
     defaultObjects.availableMemes.forEach( function(name) {
         var m = Meme.factory(name);
-        if(meme == name)
+        if(settings.meme == name)
             result.memes.unshift( m);      // player's meme is always the zeroeth element
         else
             result.memes.push( m);
