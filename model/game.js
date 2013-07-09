@@ -8,14 +8,16 @@ var mongoose = require('mongoose'),
     ObjectId = Schema.ObjectId,
     defaultObjects = require('./../model/defaultObjects'),
     Meme = require('./meme'),
-    Locale = require('./locale');
+    Locale = require('./locale'),
+    Turn = require('./turn');
 
 var GameSchema = new Schema( {
     owner:      { type:ObjectId, required:true },
     settings:   Object,
     state:      String,
     memes:      [Meme.schema],
-    locales:    [Locale.schema]
+    locales:    [Locale.schema],
+    turns:      [Turn.schema],       // zeroth turn is current turn
 });
 
 
@@ -37,8 +39,13 @@ GameSchema.statics.factory = function( settings, ownerId, cb) {
         result.locales.push(Locale.factory(name));
     });
 
+    result.newTurn();
     result.update(cb);
 };
+
+GameSchema.methods.newTurn = function() {
+    this.turns.unshift( Turn.factory(this.turns.length>0?this.turns[0]:null));
+}
 
 GameSchema.methods.update = function(cb) {
     this.save( function(err,game) {

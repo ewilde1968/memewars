@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  #navBar
+    p #{game.turns[0].year} AD
+    cancelUrl = '/user/' + accountId
+    a(href=cancelUrl)
+      button.leftNavButton Quit
+    a#nextbutton
+      button.rightNavButton Spring
+  formUrl = '/user/' + accountId + '/game/' + gameId
+  form( action=formUrl, method="POST")
+    fieldset
+      label(for="focus") Focus
+      input(type="range", name="focus", value=game.turns[0].focus)
+      div
+        span.leftLabel #{game.memes[0].leftFocusName}
+        p.rightLabel #{game.memes[0].rightFocusName}
+      // label(for="localeFunding") Locale Funding
+      if game.turns[0].risks.length > 0
+        label(for="risks") Risks
+        select(name="risks", id="risks")
+          each risk in game.turns[0].risks
+            option(value=risk.name) #{risk.name}
+      // label(for="leaders") Leaders
+
+  script.
+    $(document).ready( function() {
+        $('#nextbutton').click( function() {
+            $('form').submit();
+        });
+    });

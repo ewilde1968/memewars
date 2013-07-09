@@ -51,6 +51,7 @@ exports.home = function( req, res, next) {
     Game.findById( req.params.gameid, function(err,game) {
         res.render( 'yearstart',
                    {accountId:req.params.userid,
+                    gameId:game.id,
                     game:game
                    });
     });
