@@ -15,37 +15,11 @@ var TurnSchema = new Schema( {
 });
 
 
-TurnSchema.statics.factory = function( turn, cb) {
-    var year = 2100;
-    var quarter = "New Year";
-    if( !!turn) {
-        year = turn.year;
-        switch( turn.quarter) {
-            case 'New Year':
-                quarter = 'Winter';
-                break;
-            case 'Winter':
-                quarter = 'Spring';
-                break;
-            case 'Spring':
-                quarter = 'Summer';
-                break;
-            case 'Summer':
-                quarter = 'Fall';
-                break;
-            case 'Fall':
-                quarter = 'New Year';
-                year++;
-                break;
-            default:
-                throw 'Turn factory: bad quarter'
-        }
-    }
-    
-    var result = new Turn({year:year,
-                           quarter:quarter
+TurnSchema.statics.factory = function(cb) {
+    var result = new Turn({year:2100,
+                           quarter:"New Year"
                           });
-
+    
     if(!!result && !!cb)
         cb(result);
 

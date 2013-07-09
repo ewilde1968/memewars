@@ -22,7 +22,11 @@ var defaultObjects = {
                       'Moscow',
                       'Johannesburg',
                       'Near Earth Orbit'
-                     ]
+                     ],
+    risks:['CubeSat Swarm',
+           'Mumbo Mumble',
+           'Happy Hunting'
+          ],
 };
 
 module.exports = defaultObjects;

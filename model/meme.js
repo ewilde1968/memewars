@@ -4,11 +4,12 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId;
+    ObjectId = Schema.ObjectId,
+    Creature = require('./creature');
 
 var MemeSchema = new Schema( {
     name:       { type:String, required:true },
-    heroes:     [ObjectId],
+    heroes:     [Creature.schema],
     victory:    [Object]
 });
 
@@ -22,7 +23,6 @@ MemeSchema.statics.factory = function( name, cb) {
     
     return result;
 };
-
 
 var Meme = mongoose.model('Meme', MemeSchema);
 module.exports = Meme;

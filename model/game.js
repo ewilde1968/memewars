@@ -9,7 +9,8 @@ var mongoose = require('mongoose'),
     defaultObjects = require('./../model/defaultObjects'),
     Meme = require('./meme'),
     Locale = require('./locale'),
-    Turn = require('./turn');
+    Turn = require('./turn'),
+    Risk = require('./risk');
 
 var GameSchema = new Schema( {
     owner:      { type:ObjectId, required:true },
@@ -35,21 +36,23 @@ GameSchema.statics.factory = function( settings, ownerId, cb) {
             result.memes.push( m);
     });
     
+    // TODO - Locales, push only those appropriate for selected meme
     defaultObjects.availableLocales.forEach( function(name) {
         result.locales.push(Locale.factory(name));
     });
+    result.locales[0].funding = 100;
 
-    result.newTurn();
+    result.turns.push( Turn.factory());
+    // TODO - Risks, these are dummy risks below
+    defaultObjects.risks.forEach( function(name) {
+        result.turns[0].risks.push(Risk.factory(name));
+    });
+    
     result.update(cb);
 };
 
-GameSchema.methods.newTurn = function() {
-    this.turns.unshift( Turn.factory(this.turns.length>0?this.turns[0]:null));
-}
-
 GameSchema.methods.update = function(cb) {
     this.save( function(err,game) {
-        if( err) return err;
         if(cb) cb(err,game);
     });
 };

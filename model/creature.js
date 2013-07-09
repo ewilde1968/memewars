@@ -7,7 +7,9 @@ var mongoose = require('mongoose'),
     ObjectId = Schema.ObjectId;
 
 var CreatureSchema = new Schema( {
-    name:       { type:String, required:true }
+    name:       { type:String, required:true },
+    funded:     { type:Boolean, default:false },
+    selffunding:{ type:Boolean, default:false }
 });
 
 

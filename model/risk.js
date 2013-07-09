@@ -17,6 +17,8 @@ RiskSchema.statics.factory = function( name, cb) {
 
     if(!!result && !!cb)
         cb(result);
+    
+    return result;
 };
 
 

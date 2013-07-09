@@ -1,6 +1,9 @@
 extends layout
 
 block content
+  script.
+    var leadersA = new Array(), numSelfFunded = 0;
+
   #navBar
     p #{game.turns[0].year} AD
     cancelUrl = '/user/' + accountId
@@ -16,17 +19,86 @@ block content
       div
         span.leftLabel #{game.memes[0].leftFocusName}
         p.rightLabel #{game.memes[0].rightFocusName}
-      // label(for="localeFunding") Locale Funding
+      #locales
+        each locale,i in game.locales
+          .localeFunding
+            label(for=locale.name) #{locale.name}
+            input(type="range", name=locale.name, value=locale.funding)
       if game.turns[0].risks.length > 0
-        label(for="risks") Risks
+        label(for="risks") Risk
         select(name="risks", id="risks")
           each risk in game.turns[0].risks
             option(value=risk.name) #{risk.name}
-      // label(for="leaders") Leaders
+      #leaders
+        each leader in game.memes[0].heroes
+          script.
+            leadersA.push( {name:#{leader.name},
+                            selffunding:#{leader.selffunding}
+                           });
+            if( #{leader.selffunding})
+                numSelfFunded++;
+          .leaderFunding
+            label(for=leader.name) #{leader.name}
+            if leader.selffunding
+                input(type="checkbox", name=leader.name, value=1, disabled=true)
+            else
+                input(type="checkbox", name=leader.name, value=leader.funded)
 
   script.
     $(document).ready( function() {
-        $('#nextbutton').click( function() {
-            $('form').submit();
+        $('#nextbutton').click( function() {$('form').submit();});
+
+
+        var lastLocaleChanged = -1;
+        var adjustCollection = function(collection,total) {
+            collection.each( function(i,e) {
+                if( i > lastLocaleChanged) {
+                    var val = parseInt($(e).val(),10);
+                    if( total != 100) {
+                        if( i == (collection.length-1))
+                            lastLocaleChanged = -1;
+                        else
+                            lastLocaleChanged = i;
+                        if( total > 100 && val > 0) {
+                            $(e).val( val - 1);
+                            total--;
+                        } else if( total < 100 && val < 100) {
+                            $(e).val( val + 1);
+                            total++;
+                        }
+                    }
+                }
+            });
+            
+            return total;
+        };
+        $('.localeFunding input').change( function() {
+            var total = parseInt( $(this).val(), 10);
+            var collection = $('.localeFunding input[name!="' + $(this).attr('name') +'"]');
+            collection.each( function(i,e) {total+=parseInt($(e).val(),10);});
+            
+            while( total != 100)
+                total = adjustCollection(collection,total);
         });
+
+
+        var adjustLeaders = function(l) {
+            var i = leadersA.length - 1;
+            var total = $('.leaderFunding input:checked') - numSelfFunded;
+            while( total > 3) {
+                if(l.val() && !leadersA[i].selffunding && leadersA[i].name!=l.attr('name')) {
+                    $('.leaderFunding input[name="' + leadersA[i].name + '"]').val(0);
+                    total--;
+                }
+                i--;
+            }
+            if( total == 3)
+                $('.leaderFunding input:not(:checked)').attr('disabled',true);
+            else
+                $('.leaderFunding input:not(:checked)').attr('disabled',false);
+        };
+        $('.leaderFunding input').change( function() {
+            adjustLeaders($(this));
+        });
+        adjustLeaders($('.leaderFunding input:first'));
     });
