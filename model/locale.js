@@ -4,12 +4,10 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId,
-    Creature = require('./creature');
+    ObjectId = Schema.ObjectId;
 
 var LocaleSchema = new Schema( {
     name:       { type:String, required:true },
-    characters: [ObjectId],
     funding:    { type:Number, default:0 }
 });
 
@@ -24,7 +22,6 @@ LocaleSchema.statics.factory = function( name, initFunding, cb) {
     
     return result;
 };
-
 
 
 var Locale = mongoose.model('Locale', LocaleSchema);

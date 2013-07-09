@@ -40,11 +40,20 @@ GameSchema.statics.factory = function( settings, ownerId, cb) {
                 });
                 result.locales[0].funding += 100 % memeTemplate.locales.length;
             }
+
+            if( !!memeTemplate.leaderOdds && memeTemplate.leaderOdds.length > 0)
+                for( var i = 0; i < memeTemplate.leadersAtStart; i++) {
+                    result.memes[0].createAndAddLeader(memeTemplate.leaderOdds[Math.floor(
+                        Math.random()*memeTemplate.leaderOdds.length)],
+                                                       settings.difficulty);
+                }
         } else
             result.memes.push( m);
     });
     
     result.turns.push( Turn.factory());
+
+    
     // TODO - Risks, these are dummy risks below
     defaultObjects.risks.forEach( function(name) {
         result.turns[0].risks.push(Risk.factory(name));

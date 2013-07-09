@@ -8,14 +8,18 @@ var mongoose = require('mongoose'),
     Creature = require('./creature');
 
 var MemeSchema = new Schema( {
-    name:       { type:String, required:true },
-    heroes:     [Creature.schema],
-    victory:    [Object]
+    name:           { type:String, required:true },
+    heroes:         [Creature.schema],
+    victory:        [Object],
+    leftFocusName:  String,
+    rightFocusName: String
 });
 
 
 MemeSchema.statics.factory = function( template, cb) {
-    var result = new Meme({name:template.name
+    var result = new Meme({name:template.name,
+                           leftFocusName:template.leftFocusName,
+                           rightFocusName:template.rightFocusName
                           });
 
     if(!!result && !!cb)
@@ -23,6 +27,26 @@ MemeSchema.statics.factory = function( template, cb) {
     
     return result;
 };
+
+// TODO - use real names
+var usedNames;
+var generateName = function(race) {
+    if( !!usedNames === false)
+        usedNames = new Array();
+    
+    if( !!usedNames[race] === false)
+        usedNames[race] = 0;
+    usedNames[race] = usedNames[race]+1;
+
+    return race + usedNames[race];
+};
+
+MemeSchema.methods.createAndAddLeader = function( race, difficulty) {
+    // TODO - use difficulty to adjust creature
+    var newLeader = Creature.factory( generateName(race), race);
+    this.heroes.push( newLeader);
+};
+
 
 var Meme = mongoose.model('Meme', MemeSchema);
 module.exports = Meme;
