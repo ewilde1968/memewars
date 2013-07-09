@@ -14,8 +14,9 @@ var LocaleSchema = new Schema( {
 });
 
 
-LocaleSchema.statics.factory = function( name, cb) {
-    var result = new Locale({name:name
+LocaleSchema.statics.factory = function( name, initFunding, cb) {
+    var result = new Locale({name:name,
+                             funding:initFunding
                           });
 
     if(!!result && !!cb)

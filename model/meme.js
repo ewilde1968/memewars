@@ -14,8 +14,8 @@ var MemeSchema = new Schema( {
 });
 
 
-MemeSchema.statics.factory = function( name, cb) {
-    var result = new Meme({name:name
+MemeSchema.statics.factory = function( template, cb) {
+    var result = new Meme({name:template.name
                           });
 
     if(!!result && !!cb)

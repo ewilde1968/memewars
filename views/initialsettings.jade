@@ -14,7 +14,7 @@ block content
       label(for="meme") Meme to play
       select(name="meme", id="memeselect")
         each meme in memes
-          option(value=meme) #{meme}
+          option(value=meme.name) #{meme.name}
       label(for="difficulty") Difficulty
       select(name="difficulty", id="diffulty")
         option(value="Tutorial") Tutorial

@@ -28,20 +28,22 @@ GameSchema.statics.factory = function( settings, ownerId, cb) {
                            state:'initial'
                           });
     
-    defaultObjects.availableMemes.forEach( function(name) {
-        var m = Meme.factory(name);
-        if(settings.meme == name)
+    defaultObjects.memes.forEach( function(memeTemplate) {
+        var m = Meme.factory(memeTemplate);
+        if(settings.meme == memeTemplate.name) {
             result.memes.unshift( m);      // player's meme is always the zeroeth element
-        else
+            
+            if( !!memeTemplate.locales && memeTemplate.locales.length > 0) {
+                var initFunding = Math.floor( 100 / memeTemplate.locales.length);
+                memeTemplate.locales.forEach( function(locale) {
+                    result.locales.push( Locale.factory(locale,initFunding));
+                });
+                result.locales[0].funding += 100 % memeTemplate.locales.length;
+            }
+        } else
             result.memes.push( m);
     });
     
-    // TODO - Locales, push only those appropriate for selected meme
-    defaultObjects.availableLocales.forEach( function(name) {
-        result.locales.push(Locale.factory(name));
-    });
-    result.locales[0].funding = 100;
-
     result.turns.push( Turn.factory());
     // TODO - Risks, these are dummy risks below
     defaultObjects.risks.forEach( function(name) {

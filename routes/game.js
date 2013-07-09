@@ -25,7 +25,7 @@ exports.createGame = function( req, res, next) {
 exports.newGame = function(req, res, next){
     res.render('initialsettings',
                {accountId:req.params.userid,
-                memes:defaultObjects.availableMemes
+                memes:defaultObjects.memes
                });
 
 };
