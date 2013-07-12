@@ -49,7 +49,7 @@ exports.update = function(req, res, next) {
 
 //app.get('/user/:userid', user.home);
 exports.home = function(req, res, next) {
-    Account.findById( req.session.userId, function( err, acct) {
-        res.render('user', {account:acct});
-    });
+    res.render( 'gamehome',
+               {accountId:req.params.userid
+               });
 };

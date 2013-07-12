@@ -1,48 +1,91 @@
 extends layout
 
 block content
+  - var turnOnMenu = game && game.memes[0];
   script.
     var leadersA = new Array(), numSelfFunded = 0;
 
-  button#nextbutton Start Year
-  #income
-    label(for="income") Income #{game.turns[0].income} MCr
-    progress(value="1.0", name="income")
-    p#remainingIncome #{game.turns[0].income} MCr
+  #sidebar
+    if turnOnMenu
+      img.memeimage(src="/images/#{game.memes[0].name}memeimage.jpg")
+    else
+      img.memeimage(src="/images/memewarsmemeimage.jpg")
+    if turnOnMenu
+      #turnCounter
+        p #{game.turns[0].quarter} #{game.turns[0].year}
+        button End Turn
+      ul
+        li
+          button#expendituresMenu
+            p Expenditures
+        li
+          button#incomeMenu
+            p Income
+        if game && game.memes[0]
+          li
+            button#researchMenu
+              p #{game.memes[0].researchName}
+        else
+          li
+            button#researchMenu
+              p Research
+        li
+          button#memesMenu
+            p Memes
+        li
+          button#historyMenu
+            p History
+        li
+          button#settingsMenu
+            p Settings
 
   formUrl = '/user/' + accountId + '/game/' + gameId
-  form( action=formUrl, method="POST")
-    fieldset
-      #propaganda
-        label(for="propaganda") Propaganda
-        input(type="range", name="propaganda", value=game.turns[0].propaganda)
-      #research
-        label(for="research") #{game.memes[0].researchName}
-        input(type="range", name="research", value=game.turns[0].research)
-      #locales
-        each locale,i in game.locales
-          .localeFunding
-            label(for=locale.name) #{locale.name}
-            input(type="range", name=locale.name, value=locale.funding)
-      #leaders
-        each leader in game.memes[0].heroes
-          script.
-            leadersA.push( {name:#{leader.name},
-                            selffunding:#{leader.selffunding}
-                           });
-            if( #{leader.selffunding})
-                numSelfFunded++;
-          .leaderFunding
-            label(for=leader.name) #{leader.name}
-            if leader.selffunding
-                input(type="checkbox", name=leader.name, value=1, disabled=true)
-            else
-                input(type="checkbox", name=leader.name, value=leader.funded)
+  form#content( action=formUrl, method="POST")
+    if turnOnMenu
+      fieldset#expendituresPage(name="expenditures")
+        #income
+          label(for="income") Income #{game.turns[0].income} MCr
+          progress(value="1.0", name="income")
+          p#remainingIncome #{game.turns[0].income} MCr
+        #propaganda
+          label(for="propaganda") Propaganda
+          input(type="range", name="propaganda", value=game.turns[0].propaganda)
+        #research
+          label(for="research") #{game.memes[0].researchName}
+          input(type="range", name="research", value=game.turns[0].research)
+        #locales
+          each locale,i in game.locales
+            .localeFunding
+              label(for=locale.name) #{locale.name}
+              input(type="range", name=locale.name, value=locale.funding)
+        #leaders
+          each leader in game.memes[0].heroes
+            script.
+              leadersA.push( {name:#{leader.name},
+                              selffunding:#{leader.selffunding}
+                             });
+              if( #{leader.selffunding})
+                  numSelfFunded++;
+            .leaderFunding
+              label(for=leader.name) #{leader.name}
+              if leader.selffunding
+                  input(type="checkbox", name=leader.name, value=1, disabled=true)
+              else
+                  input(type="checkbox", name=leader.name, value=leader.funded)
+      fieldset#incomePage(name="income")
+      fieldset#researchPage(name="research")
+      fieldset#memesPage(name="memes")
+      fieldset#historyPage(name="history")
+    fieldset#settingsPage(name="settings")
+      a(href='/') Logout
+      newGameURL = '/user/' + accountId + '/game/new'
+      a(href=newGameURL) New Game
+      .multilist
+        ul.listgroup
 
   script.
     $(document).ready( function() {
-        $('#nextbutton').click( function() {$('form').submit();});
-
+        //expendituresPage
         var lastLocaleChanged = -1;
         var adjustCollection = function(collection,total) {
             collection.each( function(i,e) {
@@ -95,4 +138,7 @@ block content
             adjustLeaders($(this));
         });
         adjustLeaders($('.leaderFunding input:first'));
+        
+        //settingsPage
+        
     });

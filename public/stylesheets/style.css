@@ -17,8 +17,12 @@ body {
     margin-right:10px;
 }
 
-#sidebar p {
-    text-align:center;
+#turnCounter p {
+    float:left;
+}
+
+#turnCounter button {
+    float:right;
 }
 
 #sidebar ul {
@@ -62,3 +66,4 @@ body {
 .memeimage {
     max-width:100%;
 }
+
