@@ -3,6 +3,7 @@
  * GET home page.
  */
 var Game = require('./../model/game'),
+    Account = require('./../model/account'),
     defaultObjects = require('./../model/defaultObjects'),
     Meme = require('./../model/meme');
 
@@ -14,6 +15,9 @@ exports.createGame = function( req, res, next) {
                  req.session.userId,
                  function(err, game) {
                      if(err) return next(err);
+
+                     Account.findByIdAndUpdate( req.session.userId,{currentGame:game.id}).exec();
+
                      if( game)
                          res.redirect('/user/' + req.params.userid + '/game/' + game._id.toHexString());
                      else

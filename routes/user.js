@@ -1,13 +1,8 @@
 
 /*
- * GET users listing.
+ * users routes
  */
 var Account = require('./../model/account');
-
-//app.get('/users', user.list);
-exports.list = function(req, res){
-    throw "GET /users - invalid call, not implemented.";
-};
 
 //app.use( function(q,r,n) {user.ensureSignedIn(q,r,n);});
 exports.ensureSignedIn = function(req, res, next) {
@@ -49,7 +44,12 @@ exports.update = function(req, res, next) {
 
 //app.get('/user/:userid', user.home);
 exports.home = function(req, res, next) {
-    res.render( 'gamehome',
-               {accountId:req.params.userid
-               });
+    Account.findById( req.session.userId, function( err, acct) {
+        if( err || !acct) return next(err);
+
+        if( acct.currentGame)
+            res.redirect( '/user/' + req.session.userId + '/game/' + acct.currentGame);
+        else
+            res.render( 'gamehome', {accountId:req.session.userId});
+    });
 };

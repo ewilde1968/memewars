@@ -12,6 +12,7 @@ var AccountSchema = new Schema( {
     last:       String,
     email:      { type:String, unique:true, required:true },
     password:   { type:String, index:true, required:true },
+    currentGame:ObjectId,
     admin:      { type:Boolean, default:false }
 });
 
