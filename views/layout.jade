@@ -9,4 +9,38 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
 
 body
+  block sidebar
+    #sidebar
+      if game && game.memes[0]
+        img.memeimage(src="/images/#{game.memes[0].name}memeimage.jpg")
+      else
+        img.memeimage(src="/images/memewarsmemeimage.jpg")
+      block menu
+        if game && game.memes[0]
+          p #{game.turns[0].quarter} #{game.turns[0].year}
+        ul
+          li
+            button#expendituresMenu
+              p Expenditures
+          li
+            button#incomeMenu
+              p Income
+          if game && game.memes[0]
+            li
+              button#researchMenu
+                p #{game.memes[0].researchName}
+          else
+            li
+              button#researchMenu
+                p Research
+          li
+            button#memesMenu
+              p Memes
+          li
+            button#historyMenu
+              p History
+          li
+            button#settingsMenu
+              p Settings
+  #content
     block content

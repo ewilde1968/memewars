@@ -4,31 +4,26 @@ block content
   script.
     var leadersA = new Array(), numSelfFunded = 0;
 
-  #navBar
-    p #{game.turns[0].year} AD
-    cancelUrl = '/user/' + accountId
-    a(href=cancelUrl)
-      button.leftNavButton Quit
-    a#nextbutton
-      button.rightNavButton Spring
+  button#nextbutton Start Year
+  #income
+    label(for="income") Income #{game.turns[0].income} MCr
+    progress(value="1.0", name="income")
+    p#remainingIncome #{game.turns[0].income} MCr
+
   formUrl = '/user/' + accountId + '/game/' + gameId
   form( action=formUrl, method="POST")
     fieldset
-      label(for="focus") Focus
-      input(type="range", name="focus", value=game.turns[0].focus)
-      div
-        span.leftLabel #{game.memes[0].leftFocusName}
-        p.rightLabel #{game.memes[0].rightFocusName}
+      #propaganda
+        label(for="propaganda") Propaganda
+        input(type="range", name="propaganda", value=game.turns[0].propaganda)
+      #research
+        label(for="research") #{game.memes[0].researchName}
+        input(type="range", name="research", value=game.turns[0].research)
       #locales
         each locale,i in game.locales
           .localeFunding
             label(for=locale.name) #{locale.name}
             input(type="range", name=locale.name, value=locale.funding)
-      if game.turns[0].risks.length > 0
-        label(for="risks") Risk
-        select(name="risks", id="risks")
-          each risk in game.turns[0].risks
-            option(value=risk.name) #{risk.name}
       #leaders
         each leader in game.memes[0].heroes
           script.
@@ -47,7 +42,6 @@ block content
   script.
     $(document).ready( function() {
         $('#nextbutton').click( function() {$('form').submit();});
-
 
         var lastLocaleChanged = -1;
         var adjustCollection = function(collection,total) {

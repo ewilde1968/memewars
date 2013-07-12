@@ -4,10 +4,61 @@ body {
     padding:0;
 }
 
-a {
-    color: #00B7FF;
-}
-
 .notShown {
     display:none;
+}
+
+#sidebar {
+    width:25%;
+    height:100%;
+    float:left;
+    margin:0;
+    margin-left:10px;
+    margin-right:10px;
+}
+
+#sidebar p {
+    text-align:center;
+}
+
+#sidebar ul {
+    list-style:none;
+    padding:0;
+}
+
+#sidebar li {
+    width:100%;
+    border: 1px solid #025920;
+    border-bottom: none;
+    overflow:hidden;
+    word-break: break-all;
+    height: 35px;
+}
+
+#sidebar li:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+#sidebar li:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom: 1px solid #025920;
+}
+
+#sidebar li button {
+    width:100%;
+    margin:0;
+    padding:0;
+    background: transparent;
+    border-style: none;
+}
+
+#content {
+    width:100%;
+    height:100%;
+}
+
+.memeimage {
+    max-width:100%;
 }

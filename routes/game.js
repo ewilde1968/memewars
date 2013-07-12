@@ -49,7 +49,7 @@ exports.initial = function(inData,callback) {
 //app.get('/user/:userid/game/:gameid', user.ensureSignedIn, game.home);
 exports.home = function( req, res, next) {
     Game.findById( req.params.gameid, function(err,game) {
-        res.render( 'yearstart',
+        res.render( 'gamehome',
                    {accountId:req.params.userid,
                     gameId:game.id,
                     game:game

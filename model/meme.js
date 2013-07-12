@@ -11,15 +11,13 @@ var MemeSchema = new Schema( {
     name:           { type:String, required:true },
     heroes:         [Creature.schema],
     victory:        [Object],
-    leftFocusName:  String,
-    rightFocusName: String
+    researchName:  String
 });
 
 
 MemeSchema.statics.factory = function( template, cb) {
     var result = new Meme({name:template.name,
-                           leftFocusName:template.leftFocusName,
-                           rightFocusName:template.rightFocusName
+                           researchName:template.researchName
                           });
 
     if(!!result && !!cb)
