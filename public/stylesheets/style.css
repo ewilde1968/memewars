@@ -86,3 +86,11 @@ body {
     float:left;
     width:120px;
 }
+
+.leaderFunding input {
+    display:none;
+}
+
+.fundedLeader {
+    border:solid red 2px;
+}

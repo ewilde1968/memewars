@@ -5,6 +5,7 @@ block content
   script.
     var leadersA = new Array(), numSelfFunded = 0;
     var corpsA = new Array();
+    var localesA = new Array();
 
   #sidebar
     if turnOnMenu
@@ -56,6 +57,10 @@ block content
           input(type="range", name="research", max=#{game.turns[0].income}, value=game.turns[0].research)
         #locales
           each locale,i in game.locales
+            script.
+              localesA.push( {name:"#{locale.name}",
+                              funding:#{locale.funding}
+                              });
             .localeFunding
               button
                 label(for=locale.name) #{locale.name}
@@ -73,8 +78,9 @@ block content
               if( #{leader.selffunding})
                   numSelfFunded++;
             .leaderFunding
-              input(type="checkbox", id=leader.name, name=leader.name, value=leader.funded)
-              label(for=leader.name) #{leader.name}
+              button.leaderDetailButton
+                p #{leader.name}
+                input(type="checkbox", name=leader.name, checked=leader.funded)
       fieldset#incomePage(name="income")
         #corporations
           p#corpTotal Corporations #{game.turns[0].corpIncome}
@@ -82,6 +88,12 @@ block content
             button.corpDetailButton
               p #{corp.name}
               p #{corp.donation} #{game.memes[0].monetaryUnit}
+        #localeIncomes
+          p#localeTotal Locales #{game.turns[0].localeIncome}
+          each locale in game.locales
+            button.localeDetailButton
+              p #{locale.name}
+              p #{locale.funding} #{game.memes[0].monetaryUnit}
       fieldset#researchPage(name="research")
       fieldset#memesPage(name="memes")
       fieldset#historyPage(name="history")
@@ -130,28 +142,26 @@ block content
             ev.preventDefault();
         });
 
-        var adjustLeaders = function(l) {
-            var i = leadersA.length - 1;
-            var total = $('.leaderFunding input:checked') - numSelfFunded;
-            while( total > 3) {
-                if(l.val() && !leadersA[i].selffunding && leadersA[i].name!=l.attr('name')) {
-                    $('.leaderFunding input[name="' + leadersA[i].name + '"]').val(0);
-                    total--;
-                }
-                i--;
+        $('.leaderFunding button').click( function(ev) {
+            ev.preventDefault();
+            
+            var i = $(this).children('input');
+            var v = i.attr('checked');
+            if( v) {
+                i.attr('checked',false);
+                $(this).removeClass('fundedLeader');
+            } else {
+                i.attr('checked',true);
+                $(this).addClass('fundedLeader');
             }
-            if( total == 3)
-                $('.leaderFunding input:not(:checked)').attr('disabled',true);
-            else
-                $('.leaderFunding input:not(:checked)').attr('disabled',false);
-        };
-        $('.leaderFunding input').change( function() {
-            adjustLeaders($(this));
         });
-        adjustLeaders($('.leaderFunding input:first'));
-        
+
+
         //incomePage
         $('.corpDetailButton').click( function(ev) {
+            ev.preventDefault();
+        });
+        $('.localeDetailButton').click( function(ev) {
             ev.preventDefault();
         });
     });
