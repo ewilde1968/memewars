@@ -55,7 +55,7 @@ exports.home = function( req, res, next) {
     Game.findById( req.params.gameid, function(err,game) {
         res.render( 'gamehome',
                    {accountId:req.params.userid,
-                    gameId:game.id,
+                    gameId:req.params.gameid,
                     game:game
                    });
     });

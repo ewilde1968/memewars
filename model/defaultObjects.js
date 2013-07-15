@@ -3,54 +3,64 @@ var defaultObjects = {
             {name:'Transhumanism',
              locales:['Near Earth Orbit','Tokyo','Singapore'],
              researchName:'Research',
+             monetaryUnit:'₡',
              leaderOdds:['Human','Alpha','Angel','Sapient AI','Cyborg','Android'],
-             leadersAtStart:3
+             leadersAtStart:3,
+             startingCorporationOdds:['']
             },
             {name:'Metal Gods',
              locales:['Tokyo','Moscow','Johannesburg'],
              researchName:'Research',
+             monetaryUnit:'₡',
              leaderOdds:['Sapient AI','Cyborg','Cyborg','Android','Android'],
              leadersAtStart:1
             },
             {name:'Corporate Fascism',
              locales:['New York','Hong Kong','Near Earth Orbit'],
              researchName:'Lobbying',
+             monetaryUnit:'℔',
              leaderOdds:['Natural','Human','Alpha','Sapient AI','Cyborg','Android'],
              leadersAtStart:3
             },
             {name:'Sons of Abraham',
              locales:['Rome','Mecca','Jeruselem'],
              researchName:'Lobbying',
+             monetaryUnit:'$',
              leaderOdds:['Natural','Natural','Human','Human','Alpha'],
              leadersAtStart:4
             },
             {name:'US Nationalism',
              locales:['New York','Los Angeles','Washington DC'],
              researchName:'Military',
+             monetaryUnit:'$',
              leaderOdds:['Natural','Natural','Natural','Human','Human','Alpha'],
              leadersAtStart:3
             },
             {name:'Chinese Nationalism',
              locales:['Beijing','Hong Kong','Shanghai'],
              researchName:'Military',
+             monetaryUnit:'¥',
              leaderOdds:['Natural','Natural','Human','Human','Alpha','Cyborg'],
              leadersAtStart:3
             },
             {name:'EU Nationalism',
              locales:['London','Rome','Berlin'],
              researchName:'Military',
+             monetaryUnit:'€',
              leaderOdds:['Natural','Natural','Human','Human','Alpha','Cyborg'],
              leadersAtStart:3
             },
             {name:'Naturalism',
              locales:['Berlin','Rome','Mecca'],
              researchName:'Lobbying',
+             monetaryUnit:'€',
              leaderOdds:['Natural','Natural','Human'],
              leadersAtStart:4
             },
             {name:'Universal Socialism',
-             locales:['Berlin','Johannesburg','Mars'],
+             locales:['Beijing','Johannesburg','Mars'],
              researchName:'Lobbying',
+             monetaryUnit:'¥',
              leaderOdds:['Natural','Human','Alpha','Angel','Sapient AI','Cyborg','Android'],
              leadersAtStart:3
             }
@@ -90,6 +100,38 @@ var defaultObjects = {
              },
              {name:'Near Earth Orbit'
              }
+        ],
+    corporations:[
+        {name:
+         locales:['','']
+        },
+        {name:
+         locales:['','']
+        },
+        {name:
+         locales:['','']
+        },
+        {name:
+         locales:['','']
+        },
+        {name:
+         locales:['','']
+        },
+        {name:
+         locales:['','']
+        },
+        {name:
+         locales:['','']
+        },
+        {name:
+         locales:['','']
+        },
+        {name:
+         locales:['','']
+        },
+        {name:
+         locales:['','']
+        },
         ],
     risks:['CubeSat Swarm',
            'Mumbo Mumble',

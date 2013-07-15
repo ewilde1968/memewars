@@ -11,7 +11,11 @@ var TurnSchema = new Schema( {
     year:       { type:Number, required:true },
     quarter:    { type:String, required:true },
     focus:      Number,
-    risks:      [Risk.schema]
+    risks:      [Risk.schema],
+    income:     { type:Number, default:0 },
+    propaganda: { type:Number, default:0 },
+    research:   { type:Number, default:0 },
+    coprIncome: { type:Number, default:0 }
 });
 
 
