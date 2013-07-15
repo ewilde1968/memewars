@@ -6,63 +6,71 @@ var defaultObjects = {
              monetaryUnit:'₡',
              leaderOdds:['Human','Alpha','Angel','Sapient AI','Cyborg','Android'],
              leadersAtStart:3,
-             startingCorporationOdds:['']
+             startingCorporationOdds:['Beyond Robotics','Biohumanity','Publicom']
             },
             {name:'Metal Gods',
              locales:['Tokyo','Moscow','Johannesburg'],
              researchName:'Research',
              monetaryUnit:'₡',
              leaderOdds:['Sapient AI','Cyborg','Cyborg','Android','Android'],
-             leadersAtStart:1
+             leadersAtStart:1,
+             startingCorporationOdds:['Beyond Robotics','Huedyn Energy','Crandall Data']
             },
             {name:'Corporate Fascism',
              locales:['New York','Hong Kong','Near Earth Orbit'],
              researchName:'Lobbying',
              monetaryUnit:'℔',
              leaderOdds:['Natural','Human','Alpha','Sapient AI','Cyborg','Android'],
-             leadersAtStart:3
+             leadersAtStart:3,
+             startingCorporationOdds:['El Grillo Entertainment','Huedyn Energy','Crandall Data']
             },
             {name:'Sons of Abraham',
              locales:['Rome','Mecca','Jeruselem'],
              researchName:'Lobbying',
              monetaryUnit:'$',
              leaderOdds:['Natural','Natural','Human','Human','Alpha'],
-             leadersAtStart:4
+             leadersAtStart:4,
+             startingCorporationOdds:['El Grillo Entertainment','Huedyn Energy','Grumman Group']
             },
             {name:'US Nationalism',
              locales:['New York','Los Angeles','Washington DC'],
              researchName:'Military',
              monetaryUnit:'$',
              leaderOdds:['Natural','Natural','Natural','Human','Human','Alpha'],
-             leadersAtStart:3
+             leadersAtStart:3,
+             startingCorporationOdds:['El Grillo Entertainment','Huedyn Energy','Grumman Group','Crandall Data']
             },
             {name:'Chinese Nationalism',
              locales:['Beijing','Hong Kong','Shanghai'],
              researchName:'Military',
              monetaryUnit:'¥',
              leaderOdds:['Natural','Natural','Human','Human','Alpha','Cyborg'],
-             leadersAtStart:3
+             leadersAtStart:3,
+             startingCorporationOdds:['Erganics','Huedyn Energy','Beyond Robotics']
             },
             {name:'EU Nationalism',
              locales:['London','Rome','Berlin'],
              researchName:'Military',
              monetaryUnit:'€',
              leaderOdds:['Natural','Natural','Human','Human','Alpha','Cyborg'],
-             leadersAtStart:3
+             leadersAtStart:3,
+             startingCorporationOdds:['Publicom','Huedyn Energy','Virgin Aerospace']
             },
             {name:'Naturalism',
              locales:['Berlin','Rome','Mecca'],
              researchName:'Lobbying',
              monetaryUnit:'€',
              leaderOdds:['Natural','Natural','Human'],
-             leadersAtStart:4
+             leadersAtStart:4,
+             startingCorporationOdds:['Complex Ecosystems Consortium','Huedyn Energy','Crandall Data']
             },
             {name:'Universal Socialism',
              locales:['Beijing','Johannesburg','Mars'],
              researchName:'Lobbying',
              monetaryUnit:'¥',
              leaderOdds:['Natural','Human','Alpha','Angel','Sapient AI','Cyborg','Android'],
-             leadersAtStart:3
+             leadersAtStart:3,
+             startingCorporationOdds:['Publicom','Huedyn Energy','Crandall Data']
             }
         ],
     locales:[
@@ -102,36 +110,39 @@ var defaultObjects = {
              }
         ],
     corporations:[
-        {name:
+        {name:'Beyond Robotics',
          locales:['','']
         },
-        {name:
+        {name:'Biohumanity',
          locales:['','']
         },
-        {name:
+        {name:'Complex Ecosystems Consortium',
          locales:['','']
         },
-        {name:
+        {name:'El Grillo Entertainment',
          locales:['','']
         },
-        {name:
+        {name:'Huedyn Energy',
          locales:['','']
         },
-        {name:
+        {name:'Erganics',        // intelligent clothes grown to omnipresence
          locales:['','']
         },
-        {name:
+        {name:'Publicom',       // distributed employment grown to massive labor force   
          locales:['','']
         },
-        {name:
+        {name:'Grumman Group',  // american arms dealer
          locales:['','']
         },
-        {name:
+        {name:'Tsinitok',       // russian arms dealer
          locales:['','']
         },
-        {name:
+        {name:'Crandall Data',  // data warehousing giant
          locales:['','']
         },
+        {name:'Virgin Aerospace',
+         locales:['','']
+        }
         ],
     risks:['CubeSat Swarm',
            'Mumbo Mumble',

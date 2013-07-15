@@ -10,6 +10,7 @@ var mongoose = require('mongoose'),
     Meme = require('./meme'),
     Locale = require('./locale'),
     Turn = require('./turn'),
+    Corporation = require('./corporation'),
     Risk = require('./risk');
 
 var GameSchema = new Schema( {
@@ -27,6 +28,8 @@ GameSchema.statics.factory = function( settings, ownerId, cb) {
                            settings:settings,
                            state:'initial'
                           });
+    
+    var takenCorps = new Array();
     
     defaultObjects.memes.forEach( function(memeTemplate) {
         var m = Meme.factory(memeTemplate);
@@ -49,6 +52,20 @@ GameSchema.statics.factory = function( settings, ownerId, cb) {
                 }
         } else
             result.memes.push( m);
+
+        if( !!memeTemplate.startingCorporationOdds && memeTemplate.startingCorporationOdds.length > 0) {
+            var i = Math.floor(Math.random()*memeTemplate.startingCorporationOdds.length)
+            do {
+                var corpName = memeTemplate.startingCorporationOdds[i];
+                if( takenCorps.indexOf( corpName) == -1) {
+                    takenCorps.push( corpName);
+                    var corp = Corporation.factory( corpName);
+                    if( corp)
+                        m.corps.push( corp);
+                }
+                i = (i + 1) % memeTemplate.startingCorporationOdds.length;
+            } while( m.corps.length < 1);
+        }
     });
     
     result.turns.push( Turn.factory());
