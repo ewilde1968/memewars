@@ -70,7 +70,7 @@ var defaultObjects = {
              monetaryUnit:'¥',
              leaderOdds:['Natural','Human','Alpha','Angel','Sapient AI','Cyborg','Android'],
              leadersAtStart:3,
-             startingCorporationOdds:['Publicom','Huedyn Energy','Crandall Data']
+             startingCorporationOdds:['Publicom','Huedyn Energy','Health Care Union']
             }
         ],
     locales:[
@@ -141,6 +141,9 @@ var defaultObjects = {
          locales:['','']
         },
         {name:'Virgin Aerospace',
+         locales:['','']
+        },
+        {name:'Health Care Union',
          locales:['','']
         }
         ],
