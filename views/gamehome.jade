@@ -57,22 +57,24 @@ block content
         #locales
           each locale,i in game.locales
             .localeFunding
-              label(for=locale.name) #{locale.name}
+              button
+                label(for=locale.name) #{locale.name}
               input(type="range", name=locale.name, value=locale.funding)
+        br
+        br
+        br
         #leaders
           each leader in game.memes[0].heroes
             script.
-              leadersA.push( {name:#{leader.name},
-                              selffunding:#{leader.selffunding}
+              leadersA.push( {name:"#{leader.name}",
+                              selffunding:#{leader.selffunding},
+                              funded:#{leader.funded}
                              });
               if( #{leader.selffunding})
                   numSelfFunded++;
             .leaderFunding
+              input(type="checkbox", id=leader.name, name=leader.name, value=leader.funded)
               label(for=leader.name) #{leader.name}
-              if leader.selffunding
-                  input(type="checkbox", name=leader.name, value=1, disabled=true)
-              else
-                  input(type="checkbox", name=leader.name, value=leader.funded)
       fieldset#incomePage(name="income")
         #corporations
           p#corpTotal Corporations #{game.turns[0].corpIncome}
@@ -124,7 +126,9 @@ block content
             while( total != 100)
                 total = adjustCollection(collection,total);
         });
-
+        $('.localeFunding button').click( function(ev) {
+            ev.preventDefault();
+        });
 
         var adjustLeaders = function(l) {
             var i = leadersA.length - 1;
@@ -146,5 +150,8 @@ block content
         });
         adjustLeaders($('.leaderFunding input:first'));
         
-        //settingsPage
+        //incomePage
+        $('.corpDetailButton').click( function(ev) {
+            ev.preventDefault();
+        });
     });
