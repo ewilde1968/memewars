@@ -25,12 +25,12 @@ block content
             p Income
         if game && game.memes[0]
           li
-            button#researchMenu
-              p #{game.memes[0].researchName}
+            button#investmentMenu
+              p #{game.memes[0].investmentName}
         else
           li
-            button#researchMenu
-              p Research
+            button#investmentMenu
+              p Investments
         li
           button#memesMenu
             p Memes
@@ -52,10 +52,10 @@ block content
         #propaganda
           label(for="propaganda") Propaganda
           input(type="range", name="propaganda", max=#{game.turns[0].income}, value=game.turns[0].propaganda)
-        #research
-          label(for="research") #{game.memes[0].researchName}
-          input(type="range", name="research", max=#{game.turns[0].income}, value=game.turns[0].research)
-        #locales
+        #investment
+          label(for="investment") #{game.memes[0].investmentName}
+          input(type="range", name="investment", max=#{game.turns[0].income}, value=game.turns[0].investment)
+        #locales.horizontalList
           each locale,i in game.locales
             script.
               localesA.push( {name:"#{locale.name}",
@@ -65,10 +65,7 @@ block content
               button
                 label(for=locale.name) #{locale.name}
               input(type="range", name=locale.name, value=locale.funding)
-        br
-        br
-        br
-        #leaders
+        #leaders.horizontalList
           each leader in game.memes[0].heroes
             script.
               leadersA.push( {name:"#{leader.name}",
@@ -81,23 +78,41 @@ block content
               button.leaderDetailButton
                 p #{leader.name}
                 input(type="checkbox", name=leader.name, checked=leader.funded)
-      fieldset#incomePage(name="income")
+      fieldset#incomePage(class='notShown')
         #corporations
-          p#corpTotal Corporations #{game.turns[0].corpIncome}
-          each corp in game.memes[0].corps
-            button.corpDetailButton
-              p #{corp.name}
-              p #{corp.donation} #{game.memes[0].monetaryUnit}
+          p#corpTotal Corporations #{game.turns[0].corpIncome} #{game.memes[0].monetaryUnit}
+          .horizontalList
+            each corp in game.memes[0].corps
+              button.corpDetailButton
+                p #{corp.name}
+                p #{corp.donation} #{game.memes[0].monetaryUnit}
         #localeIncomes
-          p#localeTotal Locales #{game.turns[0].localeIncome}
-          each locale in game.locales
-            button.localeDetailButton
-              p #{locale.name}
-              p #{locale.funding} #{game.memes[0].monetaryUnit}
-      fieldset#researchPage(name="research")
-      fieldset#memesPage(name="memes")
-      fieldset#historyPage(name="history")
-    fieldset#settingsPage(name="settings")
+          p#localeTotal Locales #{game.turns[0].localeIncome} #{game.memes[0].monetaryUnit}
+          .horizontalList
+            each locale in game.locales
+              button.localeDetailButton
+                p #{locale.name}
+                p #{locale.funding} #{game.memes[0].monetaryUnit}
+      fieldset#investmentPage(class='notShown')
+        #investmentAreas
+          p#investmentTotal #{game.memes[0].investmentName} #{game.turns[0].investment} #{game.memes[0].monetaryUnit}
+          each investment in game.memes[0].investments
+            button.investmentDetailButton
+              p #{investment.name}
+              p #{investment.funding} #{game.memes[0].monetaryUnit}
+        #propagandaAreas
+          p#propagandaTotal Propaganda #{game.turns[0].propaganda} #{game.memes[0].monetaryUnit}
+          each item in game.memes[0].propagandas
+            button.propagandaDetailButton
+              p #{item.name}
+              p #{item.funding} #{game.memes[0].monetaryUnit}
+      fieldset#memesPage(class='notShown')
+        each meme in game.memes
+          .memeItem
+            button.memeDetailButton
+              p #{meme.name}
+      fieldset#historyPage(class='notShown')
+    fieldset#settingsPage(class='notShown')
       a(href='/') Logout
       newGameURL = '/user/' + accountId + '/game/new'
       a(href=newGameURL) New Game
@@ -106,6 +121,22 @@ block content
 
   script.
     $(document).ready( function() {
+        // menu
+        var pageShown = '#expendituresPage';
+        var showPage = function( pageToShow) {
+            if( pageShown != pageToShow) {
+                $(pageShown).addClass('notShown');
+                pageShown = pageToShow;
+                $(pageShown).removeClass('notShown');
+            }
+        };
+        $('#expendituresMenu').click( function() {showPage('#expendituresPage');});
+        $('#incomeMenu').click( function() {showPage('#incomePage');});
+        $('#investmentMenu').click( function() {showPage('#investmentPage');});
+        $('#memesMenu').click( function() {showPage('#memesPage');});
+        $('#historyMenu').click( function() {showPage('#historyPage');});
+        $('#settingsMenu').click( function() {showPage('#settingsPage');});
+
         //expendituresPage
         var lastLocaleChanged = -1;
         var adjustCollection = function(collection,total) {
@@ -162,6 +193,19 @@ block content
             ev.preventDefault();
         });
         $('.localeDetailButton').click( function(ev) {
+            ev.preventDefault();
+        });
+        
+        //investmentPage
+        $('.investmentDetailButton').click( function(ev) {
+            ev.preventDefault();
+        });
+        $('.propagandaDetailButton').click( function(ev) {
+            ev.preventDefault();
+        });
+        
+        //memePage
+        $('.memeDetailButton').click( function(ev) {
             ev.preventDefault();
         });
     });

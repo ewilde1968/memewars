@@ -10,8 +10,7 @@ var mongoose = require('mongoose'),
     Meme = require('./meme'),
     Locale = require('./locale'),
     Turn = require('./turn'),
-    Corporation = require('./corporation'),
-    Risk = require('./risk');
+    Corporation = require('./corporation');
 
 var GameSchema = new Schema( {
     owner:      { type:ObjectId, required:true },
@@ -70,12 +69,6 @@ GameSchema.statics.factory = function( settings, ownerId, cb) {
     
     result.turns.push( Turn.factory());
 
-    
-    // TODO - Risks, these are dummy risks below
-    defaultObjects.risks.forEach( function(name) {
-        result.turns[0].risks.push(Risk.factory(name));
-    });
-    
     result.update(cb);
 };
 

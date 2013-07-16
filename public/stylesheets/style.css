@@ -67,6 +67,15 @@ body {
     max-width:100%;
 }
 
+.horizontalList {
+    height:90px;
+    overflow-x:scroll;
+}
+
+#leaders {
+    display:block;
+}
+
 .localeFunding {
     float:left;
     width:120px;

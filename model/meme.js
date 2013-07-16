@@ -6,21 +6,25 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId,
     Creature = require('./creature'),
-    Corporation = require('./corporation');
+    Corporation = require('./corporation'),
+    Investment = require('./investment'),
+    Propaganda = require('./propaganda');
 
 var MemeSchema = new Schema( {
     name:           { type:String, required:true },
     heroes:         [Creature.schema],
     corps:          [Corporation.schema],
+    investments:    [Investment.schema],
+    propagandas:    [Propaganda.schema],
     victory:        [Object],
-    researchName:   String,
+    investmentName: String,
     monetaryUnit:   String
 });
 
 
 MemeSchema.statics.factory = function( template, cb) {
     var result = new Meme({name:template.name,
-                           researchName:template.researchName,
+                           investmentName:template.investmentName,
                            monetaryUnit:template.monetaryUnit
                           });
 

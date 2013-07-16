@@ -8,7 +8,8 @@ var mongoose = require('mongoose'),
 
 var LocaleSchema = new Schema( {
     name:       { type:String, required:true },
-    funding:    { type:Number, default:0 }
+    funding:    { type:Number, default:0 },
+    donation:   { type:Number, default:0 }
 });
 
 
