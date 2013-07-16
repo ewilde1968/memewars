@@ -6,6 +6,12 @@ block content
     var leadersA = new Array(), numSelfFunded = 0;
     var corpsA = new Array();
     var localesA = new Array();
+  mixin settingsPageMixin
+    a(href='/') Logout
+    newGameURL = '/user/' + accountId + '/game/new'
+    a(href=newGameURL) New Game
+    .multilist
+      ul.listgroup
 
   #sidebar
     if turnOnMenu
@@ -48,7 +54,7 @@ block content
         label(for="income") Income #{game.memes[0].monetaryUnit} #{game.turns[0].income}
         progress(value="1.0", name="income")
         p#remainingIncome #{game.memes[0].monetaryUnit} #{game.turns[0].income}
-      fieldset#expendituresPage(name="expenditures")
+      fieldset#expendituresPage
         #propaganda
           label(for="propaganda") Propaganda
           input(type="range", name="propaganda", max=#{game.turns[0].income}, value=game.turns[0].propaganda)
@@ -56,7 +62,7 @@ block content
           label(for="investment") #{game.memes[0].investmentName}
           input(type="range", name="investment", max=#{game.turns[0].income}, value=game.turns[0].investment)
         #locales.horizontalList
-          each locale,i in game.locales
+          each locale,i in game.memes[0].locales
             script.
               localesA.push( {name:"#{locale.name}",
                               funding:#{locale.funding}
@@ -89,7 +95,7 @@ block content
         #localeIncomes
           p#localeTotal Locales #{game.turns[0].localeIncome} #{game.memes[0].monetaryUnit}
           .horizontalList
-            each locale in game.locales
+            each locale in game.memes[0].locales
               button.localeDetailButton
                 p #{locale.name}
                 p #{locale.funding} #{game.memes[0].monetaryUnit}
@@ -102,7 +108,7 @@ block content
               p #{investment.funding} #{game.memes[0].monetaryUnit}
         #propagandaAreas
           p#propagandaTotal Propaganda #{game.turns[0].propaganda} #{game.memes[0].monetaryUnit}
-          each item in game.memes[0].propagandas
+          each item in game.memes[0].propaganda
             button.propagandaDetailButton
               p #{item.name}
               p #{item.funding} #{game.memes[0].monetaryUnit}
@@ -112,12 +118,12 @@ block content
             button.memeDetailButton
               p #{meme.name}
       fieldset#historyPage(class='notShown')
-    fieldset#settingsPage(class='notShown')
-      a(href='/') Logout
-      newGameURL = '/user/' + accountId + '/game/new'
-      a(href=newGameURL) New Game
-      .multilist
-        ul.listgroup
+    if turnOnMenu
+      fieldset#settingsPage(class='notShown')
+        mixin settingsPageMixin
+    else
+      fieldset#settingsPage
+        mixin settingsPageMixin
 
   script.
     $(document).ready( function() {

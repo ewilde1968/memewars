@@ -8,7 +8,6 @@ var mongoose = require('mongoose'),
     ObjectId = Schema.ObjectId,
     defaultObjects = require('./../model/defaultObjects'),
     Meme = require('./meme'),
-    Locale = require('./locale'),
     Turn = require('./turn'),
     Corporation = require('./corporation');
 
@@ -17,8 +16,7 @@ var GameSchema = new Schema( {
     settings:   Object,
     state:      String,
     memes:      [Meme.schema],
-    locales:    [Locale.schema],
-    turns:      [Turn.schema],       // zeroth turn is current turn
+    turns:      [Turn.schema]       // zeroth turn is current turn
 });
 
 
@@ -27,28 +25,13 @@ GameSchema.statics.factory = function( settings, ownerId, cb) {
                            settings:settings,
                            state:'initial'
                           });
-    
+
     var takenCorps = new Array();
-    
     defaultObjects.memes.forEach( function(memeTemplate) {
-        var m = Meme.factory(memeTemplate);
+        var m = Meme.factory(memeTemplate, settings);
         if(settings.meme == memeTemplate.name) {
             result.memes.unshift( m);      // player's meme is always the zeroeth element
-            
-            if( !!memeTemplate.locales && memeTemplate.locales.length > 0) {
-                var initFunding = Math.floor( 100 / memeTemplate.locales.length);
-                memeTemplate.locales.forEach( function(locale) {
-                    result.locales.push( Locale.factory(locale,initFunding));
-                });
-                result.locales[0].funding += 100 % memeTemplate.locales.length;
-            }
 
-            if( !!memeTemplate.leaderOdds && memeTemplate.leaderOdds.length > 0)
-                for( var i = 0; i < memeTemplate.leadersAtStart; i++) {
-                    result.memes[0].createAndAddLeader(memeTemplate.leaderOdds[Math.floor(
-                        Math.random()*memeTemplate.leaderOdds.length)],
-                                                       settings.difficulty);
-                }
         } else
             result.memes.push( m);
 

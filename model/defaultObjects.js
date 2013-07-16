@@ -6,7 +6,10 @@ var defaultObjects = {
              monetaryUnit:'₡',
              leaderOdds:['Human','Alpha','Angel','Sapient AI','Cyborg','Android'],
              leadersAtStart:3,
-             startingCorporationOdds:['Beyond Robotics','Biohumanity','Publicom']
+             startingCorporationOdds:['Beyond Robotics','Biohumanity','Publicom'],
+             corporationsAtStart:1,
+             startingInvestments:['Bioengineering','Nanotechnology','Artificial Intelligence'],
+             startingPropaganda:['Secularism','Freedom of Form']
             },
             {name:'Metal Gods',
              locales:['Tokyo','Moscow','Johannesburg'],
@@ -14,7 +17,10 @@ var defaultObjects = {
              monetaryUnit:'₡',
              leaderOdds:['Sapient AI','Cyborg','Cyborg','Android','Android'],
              leadersAtStart:1,
-             startingCorporationOdds:['Beyond Robotics','Huedyn Energy','Crandall Data']
+             startingCorporationOdds:['Beyond Robotics','Huedyn Energy','Crandall Data'],
+             corporationsAtStart:1,
+             startingInvestments:['Nanotechnology','Artificial Intelligence','Energy Efficiency'],
+             startingPropaganda:['Secularism','Freedom of Form']
             },
             {name:'Corporate Fascism',
              locales:['New York','Hong Kong','Near Earth Orbit'],
@@ -22,7 +28,10 @@ var defaultObjects = {
              monetaryUnit:'℔',
              leaderOdds:['Natural','Human','Alpha','Sapient AI','Cyborg','Android'],
              leadersAtStart:3,
-             startingCorporationOdds:['El Grillo Entertainment','Huedyn Energy','Crandall Data']
+             startingCorporationOdds:['El Grillo Entertainment','Huedyn Energy','Crandall Data'],
+             corporationsAtStart:1,
+             startingInvestments:['Nanotechnology','Artificial Intelligence','Bioengineering','Energy Efficiency'],
+             startingPropaganda:['Free Market Economy','Consumerism']
             },
             {name:'Sons of Abraham',
              locales:['Rome','Mecca','Jeruselem'],
@@ -30,7 +39,10 @@ var defaultObjects = {
              monetaryUnit:'$',
              leaderOdds:['Natural','Natural','Human','Human','Alpha'],
              leadersAtStart:4,
-             startingCorporationOdds:['El Grillo Entertainment','Huedyn Energy','Grumman Group']
+             startingCorporationOdds:['El Grillo Entertainment','Huedyn Energy','Grumman Group'],
+             corporationsAtStart:1,
+             startingInvestments:['Nanotechnology','Energy Efficiency','Ecological Rehabilitation'],
+             startingPropaganda:['Free Market Economy','Spiritual Awakening']
             },
             {name:'US Nationalism',
              locales:['New York','Los Angeles','Washington DC'],
@@ -38,7 +50,10 @@ var defaultObjects = {
              monetaryUnit:'$',
              leaderOdds:['Natural','Natural','Natural','Human','Human','Alpha'],
              leadersAtStart:3,
-             startingCorporationOdds:['El Grillo Entertainment','Huedyn Energy','Grumman Group','Crandall Data']
+             startingCorporationOdds:['El Grillo Entertainment','Huedyn Energy','Grumman Group','Crandall Data'],
+             corporationsAtStart:1,
+             startingInvestments:['Nanotechnology','Artificial Intelligence','Energy Efficiency','Tactical Weaponry'],
+             startingPropaganda:['Free Market Economy','Nationalism']
             },
             {name:'Chinese Nationalism',
              locales:['Beijing','Hong Kong','Shanghai'],
@@ -46,7 +61,10 @@ var defaultObjects = {
              monetaryUnit:'¥',
              leaderOdds:['Natural','Natural','Human','Human','Alpha','Cyborg'],
              leadersAtStart:3,
-             startingCorporationOdds:['Erganics','Huedyn Energy','Beyond Robotics']
+             startingCorporationOdds:['Erganics','Huedyn Energy','Beyond Robotics'],
+             corporationsAtStart:1,
+             startingInvestments:['Nanotechnology','Artificial Intelligence','Bioengineering','Tactical Weaponry'],
+             startingPropaganda:['Free Market Economy','Nationalism']
             },
             {name:'EU Nationalism',
              locales:['London','Rome','Berlin'],
@@ -54,7 +72,10 @@ var defaultObjects = {
              monetaryUnit:'€',
              leaderOdds:['Natural','Natural','Human','Human','Alpha','Cyborg'],
              leadersAtStart:3,
-             startingCorporationOdds:['Publicom','Huedyn Energy','Virgin Aerospace']
+             startingCorporationOdds:['Publicom','Huedyn Energy','Virgin Aerospace'],
+             corporationsAtStart:1,
+             startingInvestments:['Energy Efficiency','Artificial Intelligence','Bioengineering','Tactical Weaponry'],
+             startingPropaganda:['Free Market Economy','Nationalism']
             },
             {name:'Naturalism',
              locales:['Berlin','Rome','Mecca'],
@@ -62,7 +83,10 @@ var defaultObjects = {
              monetaryUnit:'€',
              leaderOdds:['Natural','Natural','Human'],
              leadersAtStart:4,
-             startingCorporationOdds:['Complex Ecosystems Consortium','Huedyn Energy','Crandall Data']
+             startingCorporationOdds:['Complex Ecosystems Consortium','Huedyn Energy','Crandall Data'],
+             corporationsAtStart:1,
+             startingInvestments:['Energy Efficiency','Ecological Rehabilitation','Tactical Weaponry'],
+             startingPropaganda:['Deep Ecology','Spiritual Awakening']
             },
             {name:'Universal Socialism',
              locales:['Beijing','Johannesburg','Mars'],
@@ -70,7 +94,10 @@ var defaultObjects = {
              monetaryUnit:'¥',
              leaderOdds:['Natural','Human','Alpha','Angel','Sapient AI','Cyborg','Android'],
              leadersAtStart:3,
-             startingCorporationOdds:['Publicom','Huedyn Energy','Health Care Union']
+             startingCorporationOdds:['Publicom','Huedyn Energy','International Workers Union'],
+             corporationsAtStart:1,
+             startingInvestments:['Energy Efficiency','Bioengineering','Tactical Weaponry'],
+             startingPropaganda:['Freedom of Form','Egalitarianism']
             }
         ],
     locales:[
@@ -143,14 +170,10 @@ var defaultObjects = {
         {name:'Virgin Aerospace',
          locales:['','']
         },
-        {name:'Health Care Union',
+        {name:'International Workers Union',
          locales:['','']
         }
         ],
-    risks:['CubeSat Swarm',
-           'Mumbo Mumble',
-           'Happy Hunting'
-          ],
     creatureTemplates:[
         {race:'Natural',
          humanity:100,
@@ -204,6 +227,38 @@ var defaultObjects = {
          mind:'10d10+20',
          level:'3d3',
          bonuses:['Tireless','High Radiation','Zero-G','Low Gravity']
+        }
+    ],
+    investmentTemplates:[
+        {name:'Energy Efficiency'
+        },
+        {name:'Bioengineering'
+        },
+        {name:'Tactical Weaponry'
+        },
+        {name:'Ecological Rehabilitation'
+        },
+        {name:'Artificial Intelligence'
+        },
+        {name:'Nanotechnology'
+        }
+    ],
+    propagandaTemplates:[
+        {name:'Secularism'
+        },
+        {name:'Freedom of Form'
+        },
+        {name:'Free Market Economy'
+        },
+        {name:'Consumerism'
+        },
+        {name:'Spiritual Awakening'
+        },
+        {name:'Nationalism'
+        },
+        {name:'Deep Ecology'
+        },
+        {name:'Egalitarianism'
         }
     ]
 };
