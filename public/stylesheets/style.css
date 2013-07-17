@@ -72,10 +72,6 @@ body {
     overflow-x:scroll;
 }
 
-#leaders {
-    display:block;
-}
-
 .localeFunding {
     float:left;
     width:120px;

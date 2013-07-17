@@ -8,7 +8,6 @@ var mongoose = require('mongoose'),
     ObjectId = Schema.ObjectId,
     defaultObjects = require('./../model/defaultObjects'),
     Meme = require('./meme'),
-    Turn = require('./turn'),
     Corporation = require('./corporation');
 
 var GameSchema = new Schema( {
@@ -16,14 +15,15 @@ var GameSchema = new Schema( {
     settings:   Object,
     state:      String,
     memes:      [Meme.schema],
-    turns:      [Turn.schema]       // zeroth turn is current turn
+    turn:      { year:Number, quarter:String }
 });
 
 
 GameSchema.statics.factory = function( settings, ownerId, cb) {
     var result = new Game({owner:ownerId,
                            settings:settings,
-                           state:'initial'
+                           state:'initial',
+                           turn:{year:2100,quarter:"New Year"}
                           });
 
     var takenCorps = new Array();
@@ -49,8 +49,6 @@ GameSchema.statics.factory = function( settings, ownerId, cb) {
             } while( m.corps.length < 1);
         }
     });
-    
-    result.turns.push( Turn.factory());
 
     result.update(cb);
 };
@@ -61,16 +59,27 @@ GameSchema.methods.update = function(cb) {
     });
 };
 
-GameSchema.methods.socketSendBack = function(newState,data,callback) {
-    if( !!newState)
-        this.state = newState;
-    data.state = this.state;
-    
-    this.save( function(err,g) {
-        if(err) return next(err);
-        if( callback) callback(data)
-    });
+GameSchema.methods.mergeOptions = function( options) {
+    this.memes[0].mergeOptions(options);
 };
+
+GameSchema.methods.nextTurn = function(cb) {
+    var err = null;
+
+    // pay interest
+    // Corporate and locale allocations to investments
+    // Corporate and locale allocations to propaganda
+    // Timeline events
+    // Triggered propaganda events
+    // Collect interest on surplus or pay off debt
+    // Triggered investment events
+    // end quarter
+    this.memes.forEach( function(m) {
+        m.endQuarter();
+    });
+
+    if(cb) cb(err,this);
+}
 
 
 var Game = mongoose.model('Game', GameSchema);

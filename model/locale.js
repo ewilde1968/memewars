@@ -24,6 +24,12 @@ LocaleSchema.statics.factory = function( name, initFunding, cb) {
     return result;
 };
 
+LocaleSchema.methods.setFunding = function( val) {
+    if( typeof val == 'string')
+        val = parseInt(val,10);
+    this.funding = val;
+};
+
 
 var Locale = mongoose.model('Locale', LocaleSchema);
 module.exports = Locale;

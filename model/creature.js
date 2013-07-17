@@ -71,6 +71,11 @@ CreatureSchema.statics.factory = function( name, race, cb) {
     return null;
 };
 
+CreatureSchema.methods.setFunding = function(val) {
+    if( !this.selffunding)
+        this.funded = val;
+};
+
 
 var Creature = mongoose.model('Creature', CreatureSchema);
 module.exports = Creature;

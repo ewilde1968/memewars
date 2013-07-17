@@ -20,7 +20,7 @@ block content
       img.memeimage(src="/images/memewarsmemeimage.jpg")
     if turnOnMenu
       #turnCounter
-        p #{game.turns[0].quarter} #{game.turns[0].year}
+        p #{game.turn.quarter} #{game.turn.year}
         button End Turn
       ul
         li
@@ -51,26 +51,19 @@ block content
   form#content( action=formUrl, method="POST")
     if turnOnMenu
       #income
-        label(for="income") Income #{game.memes[0].monetaryUnit} #{game.turns[0].income}
+        label(for="income") Income #{game.memes[0].monetaryUnit} #{game.memes[0].income}
         progress(value="1.0", name="income")
-        p#remainingIncome #{game.memes[0].monetaryUnit} #{game.turns[0].income}
+        p#remainingIncome #{game.memes[0].monetaryUnit} #{game.memes[0].income}
       fieldset#expendituresPage
         #propaganda
           label(for="propaganda") Propaganda
-          input(type="range", name="propaganda", max=#{game.turns[0].income}, value=game.turns[0].propaganda)
+          input(type="range", name="propaganda", max=#{game.memes[0].income}, value=game.memes[0].propaganda)
         #investment
           label(for="investment") #{game.memes[0].investmentName}
-          input(type="range", name="investment", max=#{game.turns[0].income}, value=game.turns[0].investment)
-        #locales.horizontalList
-          each locale,i in game.memes[0].locales
-            script.
-              localesA.push( {name:"#{locale.name}",
-                              funding:#{locale.funding}
-                              });
-            .localeFunding
-              button
-                label(for=locale.name) #{locale.name}
-              input(type="range", name=locale.name, value=locale.funding)
+          input(type="range", name="investment", max=#{game.memes[0].income}, value=game.memes[0].investment)
+        #localeVsCorp
+          label(for="localeVsCorp") Relative Locale vs Corporate Investment
+          input(type="range", name="localeVsCorp", max=100, value=game.memes[0].localeVsCorp)
         #leaders.horizontalList
           each leader in game.memes[0].heroes
             script.
@@ -78,36 +71,49 @@ block content
                               selffunding:#{leader.selffunding},
                               funded:#{leader.funded}
                              });
-              if( #{leader.selffunding})
-                  numSelfFunded++;
+            if leader.selffunding
+              script.
+                numSelfFunded++;
             .leaderFunding
-              button.leaderDetailButton
-                p #{leader.name}
-                input(type="checkbox", name=leader.name, checked=leader.funded)
+              if leader.funded
+                button.leaderDetailButton(class='fundedLeader')
+                  p #{leader.name}
+                  input(type="checkbox", name=leader.name, checked='true')
+              else
+                button.leaderDetailButton
+                  p #{leader.name}
+                  input(type="checkbox", name=leader.name)
       fieldset#incomePage(class='notShown')
         #corporations
-          p#corpTotal Corporations #{game.turns[0].corpIncome} #{game.memes[0].monetaryUnit}
+          p#corpTotal Corporations #{game.memes[0].corpIncome} #{game.memes[0].monetaryUnit}
           .horizontalList
             each corp in game.memes[0].corps
               button.corpDetailButton
-                p #{corp.name}
+                label(for=corp.name) #{corp.name}
                 p #{corp.donation} #{game.memes[0].monetaryUnit}
-        #localeIncomes
-          p#localeTotal Locales #{game.turns[0].localeIncome} #{game.memes[0].monetaryUnit}
+                input(type="range", name=corp.name, value=corp.funding)
+        #locales
+          p#localeTotal Locales #{game.memes[0].localeIncome} #{game.memes[0].monetaryUnit}
           .horizontalList
-            each locale in game.memes[0].locales
-              button.localeDetailButton
-                p #{locale.name}
-                p #{locale.funding} #{game.memes[0].monetaryUnit}
+            each locale,i in game.memes[0].locales
+              script.
+                localesA.push( {name:"#{locale.name}",
+                                funding:#{locale.funding}
+                                });
+              .localeFunding
+                button.localeDetailButton
+                  label(for=locale.name) #{locale.name}
+                  p #{locale.donation} #{game.memes[0].monetaryUnit}
+                  input(type="range", name=locale.name, value=locale.funding)
       fieldset#investmentPage(class='notShown')
         #investmentAreas
-          p#investmentTotal #{game.memes[0].investmentName} #{game.turns[0].investment} #{game.memes[0].monetaryUnit}
+          p#investmentTotal #{game.memes[0].investmentName} #{game.memes[0].investment} #{game.memes[0].monetaryUnit}
           each investment in game.memes[0].investments
             button.investmentDetailButton
               p #{investment.name}
               p #{investment.funding} #{game.memes[0].monetaryUnit}
         #propagandaAreas
-          p#propagandaTotal Propaganda #{game.turns[0].propaganda} #{game.memes[0].monetaryUnit}
+          p#propagandaTotal Propaganda #{game.memes[0].propaganda} #{game.memes[0].monetaryUnit}
           each item in game.memes[0].propaganda
             button.propagandaDetailButton
               p #{item.name}
@@ -142,43 +148,11 @@ block content
         $('#memesMenu').click( function() {showPage('#memesPage');});
         $('#historyMenu').click( function() {showPage('#historyPage');});
         $('#settingsMenu').click( function() {showPage('#settingsPage');});
+        $('#turnCounter button').click(function() {
+            $('form').submit();
+        });
 
         //expendituresPage
-        var lastLocaleChanged = -1;
-        var adjustCollection = function(collection,total) {
-            collection.each( function(i,e) {
-                if( i > lastLocaleChanged) {
-                    var val = parseInt($(e).val(),10);
-                    if( total != 100) {
-                        if( i == (collection.length-1))
-                            lastLocaleChanged = -1;
-                        else
-                            lastLocaleChanged = i;
-                        if( total > 100 && val > 0) {
-                            $(e).val( val - 1);
-                            total--;
-                        } else if( total < 100 && val < 100) {
-                            $(e).val( val + 1);
-                            total++;
-                        }
-                    }
-                }
-            });
-            
-            return total;
-        };
-        $('.localeFunding input').change( function() {
-            var total = parseInt( $(this).val(), 10);
-            var collection = $('.localeFunding input[name!="' + $(this).attr('name') +'"]');
-            collection.each( function(i,e) {total+=parseInt($(e).val(),10);});
-            
-            while( total != 100)
-                total = adjustCollection(collection,total);
-        });
-        $('.localeFunding button').click( function(ev) {
-            ev.preventDefault();
-        });
-
         $('.leaderFunding button').click( function(ev) {
             ev.preventDefault();
             
@@ -193,13 +167,41 @@ block content
             }
         });
 
-
         //incomePage
         $('.corpDetailButton').click( function(ev) {
             ev.preventDefault();
         });
         $('.localeDetailButton').click( function(ev) {
             ev.preventDefault();
+        });
+        var lastChanged = -1;
+        var adjustCollection = function( collection, max, untouchable) {
+            var total = parseInt( untouchable.val(), 10);
+            collection.each( function(i,e) {total+=parseInt($(e).val(),10);});
+
+            if(lastChanged >= collection.length)
+                lastChanged = -1;
+
+            while( total != max) {
+                collection.each( function(i,e) {
+                    if(i>lastChanged) {
+                        var val = parseInt($(e).val(),10);
+                        if( total != max) {
+                            lastChanged = (i==(collection.length-1))?lastChanged=-1:i;
+                            if( total > max && val > 0) {
+                                $(e).val( val - 1);
+                                total--;
+                            } else if( total < max && val < max) {
+                                $(e).val( val + 1);
+                                total++;
+                            }
+                        }
+                    }
+                });
+            }
+        };
+        $('.localeFunding input').change( function() {
+            adjustCollection($('.localeFunding input[name!="' + $(this).attr('name') +'"]'),100, $(this));
         });
         
         //investmentPage

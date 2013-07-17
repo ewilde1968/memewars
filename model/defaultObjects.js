@@ -138,39 +138,51 @@ var defaultObjects = {
         ],
     corporations:[
         {name:'Beyond Robotics',
+         startingDonation:1000,
          locales:['','']
         },
         {name:'Biohumanity',
+         startingDonation:1000,
          locales:['','']
         },
         {name:'Complex Ecosystems Consortium',
+         startingDonation:1000,
          locales:['','']
         },
         {name:'El Grillo Entertainment',
+         startingDonation:1000,
          locales:['','']
         },
         {name:'Huedyn Energy',
+         startingDonation:1000,
          locales:['','']
         },
         {name:'Erganics',        // intelligent clothes grown to omnipresence
+         startingDonation:1000,
          locales:['','']
         },
         {name:'Publicom',       // distributed employment grown to massive labor force   
+         startingDonation:1000,
          locales:['','']
         },
         {name:'Grumman Group',  // american arms dealer
+         startingDonation:1000,
          locales:['','']
         },
         {name:'Tsinitok',       // russian arms dealer
+         startingDonation:1000,
          locales:['','']
         },
         {name:'Crandall Data',  // data warehousing giant
+         startingDonation:1000,
          locales:['','']
         },
         {name:'Virgin Aerospace',
+         startingDonation:1000,
          locales:['','']
         },
         {name:'International Workers Union',
+         startingDonation:1000,
          locales:['','']
         }
         ],
