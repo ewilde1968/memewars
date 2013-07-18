@@ -66,17 +66,13 @@ GameSchema.methods.mergeOptions = function( options) {
 GameSchema.methods.nextTurn = function(cb) {
     var err = null;
 
-    // pay interest
-    //this.memeplexes.forEach( function(m) {m.payInterest();});
-    
     // Corporate and locale allocations to investments
     // Corporate and locale allocations to propaganda
     // Timeline events
     // Triggered propaganda events
-    // Collect interest on surplus or pay off debt
     // Triggered investment events
     // end quarter
-    //this.memeplexes.forEach( function(m) {m.endQuarter();});
+    this.memeplexes.forEach( function(m) {m.endQuarter();});
 
     if(cb) cb(err,this);
 }

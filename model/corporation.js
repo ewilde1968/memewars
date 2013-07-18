@@ -18,7 +18,7 @@ var CorporationSchema = new Schema( {
 
 CorporationSchema.statics.factory = function( name, cb) {
     var result = new Corporation({name:name,
-                                  donation:0,
+                                  donation:1000,
                                   funding:0,
                                   influence:0
                                  });
@@ -35,6 +35,9 @@ CorporationSchema.methods.setFunding = function(val) {
     this.funding = val;
 };
 
+CorporationSchema.methods.availableResources = function() {
+    return this.donation;
+}
 
 var Corporation = mongoose.model('Corporation', CorporationSchema);
 module.exports = Corporation;

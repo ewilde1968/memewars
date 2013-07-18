@@ -112,7 +112,16 @@ MemeplexSchema.methods.mergeOptions = function(options) {
     //props:     [Propaganda.schema],
 };
 
+MemeplexSchema.methods.availableResources = function() {
+    var result = this.capital;
+    this.locales.forEach( function(l) {result+=l.availableResources();});
+    this.corps.forEach( function(c) {result+=c.availableResources();});
+    
+    return result;
+};
+
 MemeplexSchema.methods.endQuarter = function() {
+    // pay/collect interest
 };
 
 

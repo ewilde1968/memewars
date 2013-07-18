@@ -45,28 +45,29 @@ block content
   formUrl = '/user/' + accountId + '/game/' + gameId
   form#content( action=formUrl, method="POST")
     if turnOnMenu
-      #income
-        label(for="income") Income #{game.memeplexes[0].monetaryUnit} #{turnIncome}
-        progress(value="1.0", name="income")
-        p#remainingIncome #{game.memeplexes[0].monetaryUnit} #{turnIncome}
+      #resources
+        p Resources #{game.memeplexes[0].monetaryUnit} #{turnResources}
+        #resourcesProgress
+          div
+        p#remainingResources #{game.memeplexes[0].monetaryUnit} #{turnResources}
       fieldset#expendituresPage
         #propaganda
           label(for="propaganda") Propaganda
-          input(type="range", name="propaganda", max=#{turnIncome}, value=game.memeplexes[0].propaganda)
+          input(type="range", name="propaganda", max="#{turnResources}", value=game.memeplexes[0].propaganda)
         #investment
           label(for="investment") #{game.memeplexes[0].investmentName}
-          input(type="range", name="investment", max=#{turnIncome}, value=game.memeplexes[0].investment)
+          input(type="range", name="investment", max="#{turnResources}", value=game.memeplexes[0].investment)
         #leaders.horizontalList
           each leader in game.memeplexes[0].leaders
             script.
               leadersA.push( {name:"#{leader.name}",
                               selffunding:#{leader.selffunding},
                               funded:#{leader.funded},
-                              profession:{name:#{leader.profession.name},level:#{leader.profession.level}},
+                              profession:{name:"#{leader.profession.name}",level:#{leader.profession.level}},
                               charisma:#{leader.charisma},
                               community:#{leader.community},
                               management:#{leader.management},
-                              race:#{leader.race}
+                              race:"#{leader.race}"
                              });
             if leader.selffunding
               script.
@@ -156,6 +157,17 @@ block content
         });
 
         //expendituresPage
+        var calculateResources = function() {
+            var spent = parseInt($('#propaganda input').val(),10) + parseInt($('#investment input').val(),10);
+            var val = (#{turnResources} - spent) * 100 / #{turnResources};
+            
+            var progress = $('#resourcesProgress div');
+            if( val < 0)
+                progress.addClass('inDebt');
+            else
+                progress.removeClass('inDebt');
+            progress.css('width',Math.floor(Math.abs(val)) + '%');
+        };
         $('.leaderFunding button').click( function(ev) {
             ev.preventDefault();
             
@@ -168,7 +180,11 @@ block content
                 i.attr('checked',true);
                 $(this).addClass('fundedLeader');
             }
+            
+            calculateResources();
         });
+        $('#propaganda input').change( function() {calculateResources();});
+        $('#investment input').change( function() {calculateResources();});
 
         //incomePage
         $('.corpDetailButton').click( function(ev) {

@@ -22,6 +22,9 @@ LocaleSchema.statics.factory = function( name, initFunding, cb) {
                              funding:initFunding
                             });
 
+    // TODO add population
+    result.population.push( Population.factory( 'Human'));
+    
     if(!!result && !!cb)
         cb(result);
     
@@ -32,6 +35,12 @@ LocaleSchema.methods.setFunding = function(val) {
     if( typeof val == 'string')
         val = parseInt(val,10);
     this.funding = val;
+};
+
+LocaleSchema.methods.availableResources = function() {
+    var result = 0;
+    this.population.forEach( function(p) {result+=p.availableResources();});
+    return result;
 };
 
 

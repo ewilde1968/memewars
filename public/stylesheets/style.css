@@ -99,3 +99,22 @@ body {
 .fundedLeader {
     border:solid red 2px;
 }
+
+#resourcesProgress {
+    position:relative;
+    left:25%;
+    width:200px;
+    border-radius: 13px; /* (height of inner div) / 2 + padding */
+    padding: 3px;
+}
+
+#resourcesProgress div {
+    background-color:green;
+    width:100%;
+    height: 20px;
+    border-radius: 10px;
+}
+
+#resourcesProgress .inDebt {
+    background-color:red;
+}
