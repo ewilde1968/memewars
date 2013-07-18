@@ -41,7 +41,7 @@ GameSchema.statics.factory = function( settings, ownerId, cb) {
                 var corpName = memeTemplate.startingCorporationOdds[i];
                 if( takenCorps.indexOf( corpName) == -1) {
                     takenCorps.push( corpName);
-                    var corp = Corporation.factory( corpName);
+                    var corp = Corporation.factory( corpName, 100);
                     if( corp)
                         m.corps.push( corp);
                 }
@@ -59,6 +59,8 @@ GameSchema.methods.update = function(cb) {
     });
 };
 
+GameSchema.methods.timelineEvents = function() {};  // TODO
+
 GameSchema.methods.mergeOptions = function( options) {
     this.memeplexes[0].mergeOptions(options);
 };
@@ -66,11 +68,16 @@ GameSchema.methods.mergeOptions = function( options) {
 GameSchema.methods.nextTurn = function(cb) {
     var err = null;
 
-    // Corporate and locale allocations to investments
-    // Corporate and locale allocations to propaganda
+    // Corporate and locale allocations to investments and propaganda
+    this.memeplexes.forEach( function(m) {m.spendFunds();});
+
     // Timeline events
-    // Triggered propaganda events
-    // Triggered investment events
+    this.timelineEvents();
+
+    // Triggered propaganda and investment events
+    this.memeplexes.forEach( function(m) {m.propagandaEvents();});
+    this.memeplexes.forEach( function(m) {m.investmentEvents();});
+
     // end quarter
     this.memeplexes.forEach( function(m) {m.endQuarter();});
 

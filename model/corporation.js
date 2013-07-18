@@ -16,10 +16,10 @@ var CorporationSchema = new Schema( {
 });
 
 
-CorporationSchema.statics.factory = function( name, cb) {
+CorporationSchema.statics.factory = function( name, initFunds, cb) {
     var result = new Corporation({name:name,
                                   donation:1000,
-                                  funding:0,
+                                  funding:initFunds,
                                   influence:0
                                  });
 

@@ -50,19 +50,23 @@ MemeplexSchema.statics.factory = function( template, settings, cb) {
     }
 
     if( template && template.startingInvestments && template.startingInvestments.length > 0) {
+        var initFunding = Math.floor( 100 / template.startingInvestments.length);
         template.startingInvestments.forEach( function(i) {
-            var inv = Investment.factory(i);
+            var inv = Investment.factory(i,initFunding);
             if( inv)
                 result.investments.push(inv);
         });
+        result.investments[0].funding += 100 % template.startingInvestments.length;
     }
 
     if( template && template.startingPropaganda && template.startingPropaganda.length > 0) {
+        var initFunding = Math.floor( 100 / template.startingPropaganda.length);
         template.startingPropaganda.forEach( function(p) {
-            var pro = Propaganda.factory(p);
+            var pro = Propaganda.factory(p,initFunding);
             if( pro)
                 result.props.push(pro);
         });
+        result.props[0].funding += 100 % template.startingPropaganda.length;
     }
 
     if(!!result && !!cb)
@@ -100,11 +104,15 @@ MemeplexSchema.methods.mergeOptions = function(options) {
         h.setFunding( 'on' == options[h.name]);
     });
 
-    this.locales.forEach( function(l) {
+    if( this.locales.length == 1)
+        this.locales[0].setFunding(100);
+    else this.locales.forEach( function(l) {
         l.setFunding( options[l.name]);
     });
 
-    this.corps.forEach( function(c) {
+    if( this.corps.length == 1)
+        this.corps[0].setFunding(100);
+    else this.corps.forEach( function(c) {
         c.setFunding( options[c.name]);
     });
 
@@ -120,8 +128,15 @@ MemeplexSchema.methods.availableResources = function() {
     return result;
 };
 
+MemeplexSchema.methods.spendFunds = function() {};  // TODO
+
+MemeplexSchema.methods.propagandaEvents = function() {}; // TODO
+
+MemeplexSchema.methods.investmentEvents = function() {}; // TODO
+
 MemeplexSchema.methods.endQuarter = function() {
     // pay/collect interest
+    // setup economy for coming turn
 };
 
 

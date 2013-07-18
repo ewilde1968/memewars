@@ -76,21 +76,6 @@ body {
     overflow-x:scroll;
 }
 
-.localeFunding {
-    float:left;
-    width:120px;
-}
-
-.localeFunding button {
-    width:90%;
-    margin-left:5%;
-}
-
-.localeFunding input {
-    width:90%;
-    margin-left:5%;
-}
-
 .leaderFunding {
     float:left;
     width:120px;

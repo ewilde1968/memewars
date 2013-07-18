@@ -12,9 +12,9 @@ var PropagandaSchema = new Schema( {
 });
 
 
-PropagandaSchema.statics.factory = function( name, cb) {
+PropagandaSchema.statics.factory = function( name, initFunding, cb) {
     var result = new Propaganda({name:name,
-                                 funding:0
+                                 funding:initFunding
                                 });
 
     if(!!result && !!cb)

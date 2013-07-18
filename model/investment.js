@@ -7,14 +7,18 @@ var mongoose = require('mongoose'),
     ObjectId = Schema.ObjectId;
 
 var InvestmentSchema = new Schema( {
-    name:       { type:String, required:true },
-    funding:    { type:Number, default:0 }
+    name:           { type:String, required:true },
+    fundsNeeded:    { type:Number, required:true },
+    funding:        Number,
+    fundsAcquired:  Number
 });
 
 
-InvestmentSchema.statics.factory = function( name, cb) {
+InvestmentSchema.statics.factory = function( name, initFunding, cb) {
     var result = new Investment({name:name,
-                                 funding:0
+                                 funding:initFunding,
+                                 fundsNeeded:0,
+                                 fundsAcquired:0
                                 });
 
     if(!!result && !!cb)

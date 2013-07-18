@@ -13,7 +13,7 @@ var LocaleSchema = new Schema( {
     biotech:    Number,
     aitech:     Number,
     nanotech:   Number,
-    funding:    Number               // valid only if member of meme
+    funding:    Number               // percentage of propaganda received, valid only if member of meme
 });
 
 

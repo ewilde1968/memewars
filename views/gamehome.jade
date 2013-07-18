@@ -27,8 +27,8 @@ block content
           button#expendituresMenu
             p Expenditures
         li
-          button#incomeMenu
-            p Income
+          button#distributionMenu
+            p Distributions
         li
           button#investmentMenu
             p Investments
@@ -81,7 +81,7 @@ block content
                 button.leaderDetailButton
                   p #{leader.name}
                   input(type="checkbox", name=leader.name)
-      fieldset#incomePage(class='notShown')
+      fieldset#distributionPage(class='notShown')
         #corporations
           p#corpTotal Corporations #{corpIncome} #{game.memeplexes[0].monetaryUnit}
           .horizontalList
@@ -102,26 +102,30 @@ block content
             each locale,i in game.memeplexes[0].locales
               script.
                 localesA.push( {name:"#{locale.name}",
-                                funding:#{locale.funding}
+                                biotech:#{locale.biotech},
+                                nanotech:#{locale.nanotech},
+                                aitech:#{locale.aitech},
+                                funding:#{locale.funding},
                                 });
-              .localeFunding
-                button.localeDetailButton
-                  label(for=locale.name) #{locale.name}
-                  p #{locale.donation} #{game.memeplexes[0].monetaryUnit}
-                  input(type="range", name=locale.name, value=locale.funding)
+              button.localeDetailButton
+                label(for=locale.name) #{locale.name}
+                br
+                input(type="range", name=locale.name, value=locale.funding)
       fieldset#investmentPage(class='notShown')
         #investmentAreas
           p#investmentTotal #{game.memeplexes[0].investmentName} #{game.memeplexes[0].investment} #{game.memeplexes[0].monetaryUnit}
           each investment in game.memeplexes[0].investments
             button.investmentDetailButton
-              p #{investment.name}
-              p #{investment.funding} #{game.memeplexes[0].monetaryUnit}
+              label(for=investment.name) #{investment.name}
+              br
+              input(type="range", name=investment.name, value=investment.funding)
         #propagandaAreas
           p#propagandaTotal Propaganda #{game.memeplexes[0].propaganda} #{game.memeplexes[0].monetaryUnit}
-          each item in game.memeplexes[0].propaganda
+          each item in game.memeplexes[0].props
             button.propagandaDetailButton
-              p #{item.name}
-              p #{item.funding} #{game.memeplexes[0].monetaryUnit}
+              label(for=item.name) #{item.name}
+              br
+              input(type="range", name=item.name, value=item.funding)
       fieldset#memeplexesPage(class='notShown')
         each memeplex in game.memeplexes
           .memeplexItem
@@ -135,8 +139,9 @@ block content
       fieldset#settingsPage
         mixin settingsPageMixin
 
-  script.
-    $(document).ready( function() {
+  if turnOnMenu
+    script.
+      $(document).ready( function() {
         // menu
         var pageShown = '#expendituresPage';
         var showPage = function( pageToShow) {
@@ -147,7 +152,7 @@ block content
             }
         };
         $('#expendituresMenu').click( function() {showPage('#expendituresPage');});
-        $('#incomeMenu').click( function() {showPage('#incomePage');});
+        $('#distributionMenu').click( function() {showPage('#distributionPage');});
         $('#investmentMenu').click( function() {showPage('#investmentPage');});
         $('#memeplexesMenu').click( function() {showPage('#memeplexesPage');});
         $('#historyMenu').click( function() {showPage('#historyPage');});
@@ -193,7 +198,7 @@ block content
         $('#investment input').change( function() {calculateResources();});
         calculateResources();
 
-        //incomePage
+        //distributionPage
         $('.corpDetailButton').click( function(ev) {
             ev.preventDefault();
         });
@@ -226,8 +231,8 @@ block content
                 });
             }
         };
-        $('.localeFunding input').change( function() {
-            adjustCollection($('.localeFunding input[name!="' + $(this).attr('name') +'"]'),100, $(this));
+        $('.localeDetailButton input').change( function() {
+            adjustCollection($('.localeDetailButton input[name!="' + $(this).attr('name') +'"]'),100, $(this));
         });
         
         //investmentPage
@@ -242,4 +247,4 @@ block content
         $('.memeplexDetailButton').click( function(ev) {
             ev.preventDefault();
         });
-    });
+      });
