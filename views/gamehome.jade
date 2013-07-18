@@ -157,15 +157,21 @@ block content
         });
 
         //expendituresPage
+        var progWidth = #{turnResources} + leadersA.length*#{leaderCost};
         var calculateResources = function() {
-            var spent = parseInt($('#propaganda input').val(),10) + parseInt($('#investment input').val(),10);
-            var val = (#{turnResources} - spent) * 100 / #{turnResources};
-            
+            var spent = parseInt($('#propaganda input').val(),10)
+                        + parseInt($('#investment input').val(),10)
+                        + ($('.fundedLeader').length - numSelfFunded) * #{leaderCost};
+
             var progress = $('#resourcesProgress div');
-            if( val < 0)
+            if( spent > #{turnResources}) {
                 progress.addClass('inDebt');
-            else
+                $('#remainingResources').text("- #{game.memeplexes[0].monetaryUnit}" + (spent - #{turnResources}));
+            } else {
                 progress.removeClass('inDebt');
+            $('#remainingResources').text("#{game.memeplexes[0].monetaryUnit}" + (#{turnResources} - spent));
+            }
+            var val = (#{turnResources} - spent) * 100 / progWidth;
             progress.css('width',Math.floor(Math.abs(val)) + '%');
         };
         $('.leaderFunding button').click( function(ev) {
@@ -185,6 +191,7 @@ block content
         });
         $('#propaganda input').change( function() {calculateResources();});
         $('#investment input').change( function() {calculateResources();});
+        calculateResources();
 
         //incomePage
         $('.corpDetailButton').click( function(ev) {

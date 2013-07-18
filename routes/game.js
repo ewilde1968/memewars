@@ -38,6 +38,7 @@ var showGameHome = function( req, res, game) {
                {accountId:req.params.userid,
                 gameId:req.params.gameid,
                 game:game,
+                leaderCost:100,
                 turnResources:game?game.memeplexes[0].availableResources():0
                });
 };
