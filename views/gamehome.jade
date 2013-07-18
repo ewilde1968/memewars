@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  - var turnOnMenu = game && game.memes[0];
+  - var turnOnMenu = game && game.memeplexes[0];
   script.
     var leadersA = new Array(), numSelfFunded = 0;
     var corpsA = new Array();
@@ -15,7 +15,7 @@ block content
 
   #sidebar
     if turnOnMenu
-      img.memeimage(src="/images/#{game.memes[0].name}memeimage.jpg")
+      img.memeimage(src="/images/#{game.memeplexes[0].name}memeimage.jpg")
     else
       img.memeimage(src="/images/memewarsmemeimage.jpg")
     if turnOnMenu
@@ -29,17 +29,12 @@ block content
         li
           button#incomeMenu
             p Income
-        if game && game.memes[0]
-          li
-            button#investmentMenu
-              p #{game.memes[0].investmentName}
-        else
-          li
-            button#investmentMenu
-              p Investments
         li
-          button#memesMenu
-            p Memes
+          button#investmentMenu
+            p Investments
+        li
+          button#memeplexesMenu
+            p Memeplexes
         li
           button#historyMenu
             p History
@@ -51,25 +46,27 @@ block content
   form#content( action=formUrl, method="POST")
     if turnOnMenu
       #income
-        label(for="income") Income #{game.memes[0].monetaryUnit} #{game.memes[0].income}
+        label(for="income") Income #{game.memeplexes[0].monetaryUnit} #{turnIncome}
         progress(value="1.0", name="income")
-        p#remainingIncome #{game.memes[0].monetaryUnit} #{game.memes[0].income}
+        p#remainingIncome #{game.memeplexes[0].monetaryUnit} #{turnIncome}
       fieldset#expendituresPage
         #propaganda
           label(for="propaganda") Propaganda
-          input(type="range", name="propaganda", max=#{game.memes[0].income}, value=game.memes[0].propaganda)
+          input(type="range", name="propaganda", max=#{turnIncome}, value=game.memeplexes[0].propaganda)
         #investment
-          label(for="investment") #{game.memes[0].investmentName}
-          input(type="range", name="investment", max=#{game.memes[0].income}, value=game.memes[0].investment)
-        #localeVsCorp
-          label(for="localeVsCorp") Relative Locale vs Corporate Investment
-          input(type="range", name="localeVsCorp", max=100, value=game.memes[0].localeVsCorp)
+          label(for="investment") #{game.memeplexes[0].investmentName}
+          input(type="range", name="investment", max=#{turnIncome}, value=game.memeplexes[0].investment)
         #leaders.horizontalList
-          each leader in game.memes[0].heroes
+          each leader in game.memeplexes[0].leaders
             script.
               leadersA.push( {name:"#{leader.name}",
                               selffunding:#{leader.selffunding},
-                              funded:#{leader.funded}
+                              funded:#{leader.funded},
+                              profession:{name:#{leader.profession.name},level:#{leader.profession.level}},
+                              charisma:#{leader.charisma},
+                              community:#{leader.community},
+                              management:#{leader.management},
+                              race:#{leader.race}
                              });
             if leader.selffunding
               script.
@@ -85,17 +82,23 @@ block content
                   input(type="checkbox", name=leader.name)
       fieldset#incomePage(class='notShown')
         #corporations
-          p#corpTotal Corporations #{game.memes[0].corpIncome} #{game.memes[0].monetaryUnit}
+          p#corpTotal Corporations #{corpIncome} #{game.memeplexes[0].monetaryUnit}
           .horizontalList
-            each corp in game.memes[0].corps
+            each corp in game.memeplexes[0].corps
+              script.
+                corpsA.push( {name:"#{corp.name}",
+                              donation:#{corp.donation},
+                              funding:#{corp.funding},
+                              influence:#{corp.influence}
+                             });
               button.corpDetailButton
                 label(for=corp.name) #{corp.name}
-                p #{corp.donation} #{game.memes[0].monetaryUnit}
+                p #{corp.donation} #{game.memeplexes[0].monetaryUnit}
                 input(type="range", name=corp.name, value=corp.funding)
         #locales
-          p#localeTotal Locales #{game.memes[0].localeIncome} #{game.memes[0].monetaryUnit}
+          p#localeTotal Locales #{localeIncome} #{game.memeplexes[0].monetaryUnit}
           .horizontalList
-            each locale,i in game.memes[0].locales
+            each locale,i in game.memeplexes[0].locales
               script.
                 localesA.push( {name:"#{locale.name}",
                                 funding:#{locale.funding}
@@ -103,26 +106,26 @@ block content
               .localeFunding
                 button.localeDetailButton
                   label(for=locale.name) #{locale.name}
-                  p #{locale.donation} #{game.memes[0].monetaryUnit}
+                  p #{locale.donation} #{game.memeplexes[0].monetaryUnit}
                   input(type="range", name=locale.name, value=locale.funding)
       fieldset#investmentPage(class='notShown')
         #investmentAreas
-          p#investmentTotal #{game.memes[0].investmentName} #{game.memes[0].investment} #{game.memes[0].monetaryUnit}
-          each investment in game.memes[0].investments
+          p#investmentTotal #{game.memeplexes[0].investmentName} #{game.memeplexes[0].investment} #{game.memeplexes[0].monetaryUnit}
+          each investment in game.memeplexes[0].investments
             button.investmentDetailButton
               p #{investment.name}
-              p #{investment.funding} #{game.memes[0].monetaryUnit}
+              p #{investment.funding} #{game.memeplexes[0].monetaryUnit}
         #propagandaAreas
-          p#propagandaTotal Propaganda #{game.memes[0].propaganda} #{game.memes[0].monetaryUnit}
-          each item in game.memes[0].propaganda
+          p#propagandaTotal Propaganda #{game.memeplexes[0].propaganda} #{game.memeplexes[0].monetaryUnit}
+          each item in game.memeplexes[0].propaganda
             button.propagandaDetailButton
               p #{item.name}
-              p #{item.funding} #{game.memes[0].monetaryUnit}
-      fieldset#memesPage(class='notShown')
-        each meme in game.memes
-          .memeItem
-            button.memeDetailButton
-              p #{meme.name}
+              p #{item.funding} #{game.memeplexes[0].monetaryUnit}
+      fieldset#memeplexesPage(class='notShown')
+        each memeplex in game.memeplexes
+          .memeplexItem
+            button.memeplexDetailButton
+              p #{memeplex.name}
       fieldset#historyPage(class='notShown')
     if turnOnMenu
       fieldset#settingsPage(class='notShown')
@@ -145,7 +148,7 @@ block content
         $('#expendituresMenu').click( function() {showPage('#expendituresPage');});
         $('#incomeMenu').click( function() {showPage('#incomePage');});
         $('#investmentMenu').click( function() {showPage('#investmentPage');});
-        $('#memesMenu').click( function() {showPage('#memesPage');});
+        $('#memeplexesMenu').click( function() {showPage('#memeplexesPage');});
         $('#historyMenu').click( function() {showPage('#historyPage');});
         $('#settingsMenu').click( function() {showPage('#settingsPage');});
         $('#turnCounter button').click(function() {
@@ -212,8 +215,8 @@ block content
             ev.preventDefault();
         });
         
-        //memePage
-        $('.memeDetailButton').click( function(ev) {
+        //memeplexesPage
+        $('.memeplexDetailButton').click( function(ev) {
             ev.preventDefault();
         });
     });

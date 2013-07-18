@@ -11,10 +11,10 @@ block content
   formUrl = '/user/' + accountId + '/game/new'
   form( action=formUrl, method="POST")
     fieldset
-      label(for="meme") Meme to play
-      select(name="meme", id="memeselect")
-        each meme in memes
-          option(value=meme.name) #{meme.name}
+      label(for="memeplex") Memeplex to play
+      select(name="memeplex", id="memeplexselect")
+        each memeplex in memeplexes
+          option(value=memeplex.name) #{memeplex.name}
       label(for="difficulty") Difficulty
       select(name="difficulty", id="diffulty")
         option(value="Tutorial") Tutorial

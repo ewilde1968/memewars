@@ -12,11 +12,10 @@ var CreatureSchema = new Schema( {
     race:       { type:String, required:true },
     funded:     { type:Boolean, default:false },
     selffunding:{ type:Boolean, default:false },
-    profession: String,
-    level:      { type:Number, default:1 },
-    humanity:   { type:Number, required:true },
-    body:       { type:Number, required:true },
-    mind:       { type:Number, required:true },
+    profession: { name:String, level:Number },
+    community:  { type:Number, required:true },
+    management: { type:Number, required:true },
+    charisma:   { type:Number, required:true }
 });
 
 
@@ -54,10 +53,12 @@ CreatureSchema.statics.factory = function( name, race, cb) {
         if( defaultObjects.creatureTemplates[i].race == race) {
             var result = new Creature({name:name,
                                        race:race,
-                                       level:interpretTemplate(defaultObjects.creatureTemplates[i].level),
-                                       humanity:interpretTemplate(defaultObjects.creatureTemplates[i].humanity),
-                                       body:interpretTemplate(defaultObjects.creatureTemplates[i].body),
-                                       mind:interpretTemplate(defaultObjects.creatureTemplates[i].mind)
+                                       profession:{name:'TODO',
+                                                   level:interpretTemplate(defaultObjects.creatureTemplates[i].level)
+                                                  },
+                                       community:interpretTemplate(defaultObjects.creatureTemplates[i].community),
+                                       management:interpretTemplate(defaultObjects.creatureTemplates[i].management),
+                                       charisma:interpretTemplate(defaultObjects.creatureTemplates[i].charisma)
                                       });
 
             if(!!result && !!cb)

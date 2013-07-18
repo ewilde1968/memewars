@@ -4,14 +4,13 @@
  */
 var Game = require('./../model/game'),
     Account = require('./../model/account'),
-    defaultObjects = require('./../model/defaultObjects'),
-    Meme = require('./../model/meme');
+    defaultObjects = require('./../model/defaultObjects');
 
 //app.get('/user/:userid/game/new', user.ensureSignedIn, game.newGame);
 exports.newGame = function(req, res, next){
     res.render('initialsettings',
                {accountId:req.params.userid,
-                memes:defaultObjects.memes
+                memeplexes:defaultObjects.memeplexes
                });
 
 };
@@ -19,7 +18,7 @@ exports.newGame = function(req, res, next){
 //app.post('/user/:userid/game/new', user.ensureSignedIn, game.createGame);
 exports.createGame = function( req, res, next) {
     Game.factory({difficulty:req.body.difficulty,
-                  meme:req.body.meme
+                  memeplex:req.body.memeplex
                  },
                  req.session.userId,
                  function(err, game) {
@@ -34,28 +33,30 @@ exports.createGame = function( req, res, next) {
                 });
 };
 
+var showGameHome = function( req, res, game) {
+    res.render( 'gamehome',
+               {accountId:req.params.userid,
+                gameId:req.params.gameid,
+                game:game
+               });
+};
+
 //app.get('/user/:userid/game/:gameid', user.ensureSignedIn, game.home);
 exports.home = function( req, res, next) {
     Game.findById( req.params.gameid, function(err,game) {
-        res.render( 'gamehome',
-                   {accountId:req.params.userid,
-                    gameId:req.params.gameid,
-                    game:game
-                   });
+        if(err) return err;
+        showGameHome( req, res, game);
     });
 };
 
 //app.post('/user/:userid/game/:gameid', user.ensureSignedIn, game.update);
 exports.update = function( req, res, next) {
     Game.findById( req.params.gameid, function(err,game) {
+        if(err) return err;
         game.mergeOptions( req.body);
         game.nextTurn( function(err,game) {
             if(err) return err;
-            res.render( 'gamehome',
-                       {accountId:req.params.userid,
-                        gameId:req.params.gameid,
-                        game:game
-                       });
+            showGameHome( req, res, game);
         });
     });
 };

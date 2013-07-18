@@ -9,8 +9,9 @@ var mongoose = require('mongoose'),
 
 var CorporationSchema = new Schema( {
     name:       { type:String, required:true },
-    donation:   { type:Number, default:0 },
-    funding:    { type:Number, default:0 },
+    donation:   Number,
+    funding:    Number,
+    influence:  Number,
     locales:    [Locale.schema]
 });
 
@@ -18,7 +19,8 @@ var CorporationSchema = new Schema( {
 CorporationSchema.statics.factory = function( name, cb) {
     var result = new Corporation({name:name,
                                   donation:0,
-                                  funding:0
+                                  funding:0,
+                                  influence:0
                                  });
 
     if(!!result && !!cb)

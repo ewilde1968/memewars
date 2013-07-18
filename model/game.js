@@ -7,15 +7,15 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId,
     defaultObjects = require('./../model/defaultObjects'),
-    Meme = require('./meme'),
+    Memeplex = require('./memeplex'),
     Corporation = require('./corporation');
 
 var GameSchema = new Schema( {
     owner:      { type:ObjectId, required:true },
     settings:   Object,
     state:      String,
-    memes:      [Meme.schema],
-    turn:      { year:Number, quarter:String }
+    memeplexes: [Memeplex.schema],
+    turn:       { year:Number, quarter:String }
 });
 
 
@@ -27,13 +27,13 @@ GameSchema.statics.factory = function( settings, ownerId, cb) {
                           });
 
     var takenCorps = new Array();
-    defaultObjects.memes.forEach( function(memeTemplate) {
-        var m = Meme.factory(memeTemplate, settings);
-        if(settings.meme == memeTemplate.name) {
-            result.memes.unshift( m);      // player's meme is always the zeroeth element
+    defaultObjects.memeplexes.forEach( function(memeTemplate) {
+        var m = Memeplex.factory(memeTemplate, settings);
+        if(settings.memeplex == memeTemplate.name) {
+            result.memeplexes.unshift( m);      // player's meme is always the zeroeth element
 
         } else
-            result.memes.push( m);
+            result.memeplexes.push( m);
 
         if( !!memeTemplate.startingCorporationOdds && memeTemplate.startingCorporationOdds.length > 0) {
             var i = Math.floor(Math.random()*memeTemplate.startingCorporationOdds.length)
@@ -60,13 +60,15 @@ GameSchema.methods.update = function(cb) {
 };
 
 GameSchema.methods.mergeOptions = function( options) {
-    this.memes[0].mergeOptions(options);
+    this.memeplexes[0].mergeOptions(options);
 };
 
 GameSchema.methods.nextTurn = function(cb) {
     var err = null;
 
     // pay interest
+    //this.memeplexes.forEach( function(m) {m.payInterest();});
+    
     // Corporate and locale allocations to investments
     // Corporate and locale allocations to propaganda
     // Timeline events
@@ -74,9 +76,7 @@ GameSchema.methods.nextTurn = function(cb) {
     // Collect interest on surplus or pay off debt
     // Triggered investment events
     // end quarter
-    this.memes.forEach( function(m) {
-        m.endQuarter();
-    });
+    //this.memeplexes.forEach( function(m) {m.endQuarter();});
 
     if(cb) cb(err,this);
 }
