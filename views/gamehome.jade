@@ -207,6 +207,12 @@ block content
         });
         var lastChanged = -1;
         var adjustCollection = function( collection, max, untouchable) {
+            if( !collection || collection.length == 0) {
+                if( untouchable && untouchable.length > 0)
+                    untouchable.val(max);
+                return; // just 1 item in group
+            }
+
             var total = parseInt( untouchable.val(), 10);
             collection.each( function(i,e) {total+=parseInt($(e).val(),10);});
 
@@ -234,6 +240,9 @@ block content
         $('.localeDetailButton input').change( function() {
             adjustCollection($('.localeDetailButton input[name!="' + $(this).attr('name') +'"]'),100, $(this));
         });
+        $('.corpDetailButton input').change( function() {
+            adjustCollection($('.corpDetailButton input[name!="' + $(this).attr('name') +'"]'),100, $(this));
+        });
         
         //investmentPage
         $('.investmentDetailButton').click( function(ev) {
@@ -242,7 +251,13 @@ block content
         $('.propagandaDetailButton').click( function(ev) {
             ev.preventDefault();
         });
-        
+        $('.investmentDetailButton input').change( function() {
+            adjustCollection($('.investmentDetailButton input[name!="' + $(this).attr('name') +'"]'),100, $(this));
+        });
+        $('.propagandaDetailButton input').change( function() {
+            adjustCollection($('.propagandaDetailButton input[name!="' + $(this).attr('name') +'"]'),100, $(this));
+        });
+
         //memeplexesPage
         $('.memeplexDetailButton').click( function(ev) {
             ev.preventDefault();

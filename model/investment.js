@@ -27,6 +27,22 @@ InvestmentSchema.statics.factory = function( name, initFunding, cb) {
     return result;
 };
 
+InvestmentSchema.methods.setFunding = function(val) {
+    if( typeof val == 'string')
+        val = parseInt(val,10);
+    this.funding = val;
+};
+
+InvestmentSchema.methods.spendFunds = function(total) {
+    this.fundsAcquired += Math.floor( total * this.funding / 100);
+};
+
+InvestmentSchema.methods.checkForEvents = function(completeCB) {
+    if( this.fundsAcquired > this.fundsNeeded) {
+        if(completeCB) completeCB(this);
+    }
+};
+
 
 var Investment = mongoose.model('Investment', InvestmentSchema);
 module.exports = Investment;

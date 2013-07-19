@@ -17,6 +17,7 @@ var MemeplexSchema = new Schema( {
     locales:        [Locale.schema],
     corps:          [Corporation.schema],
     investments:    [Investment.schema],
+    achieved:       [Investment.schema],
     props:          [Propaganda.schema],
     investmentName: String,
     monetaryUnit:   String,
@@ -116,8 +117,17 @@ MemeplexSchema.methods.mergeOptions = function(options) {
         c.setFunding( options[c.name]);
     });
 
-    //investments:    [Investment.schema],
-    //props:     [Propaganda.schema],
+    if( this.investments.length == 1)
+        this.investments[0].setFunding(100);
+    else this.investments.forEach( function(i) {
+        i.setFunding( options[i.name]);
+    });
+
+    if( this.props.length == 1)
+        this.props[0].setFunding(100);
+    else this.props.forEach( function(p) {
+        p.setFunding( options[p.name]);
+    });
 };
 
 MemeplexSchema.methods.availableResources = function() {
@@ -128,15 +138,34 @@ MemeplexSchema.methods.availableResources = function() {
     return result;
 };
 
-MemeplexSchema.methods.spendFunds = function() {};  // TODO
+MemeplexSchema.methods.spendFunds = function() {
+    var totalSpent = this.investment;
+    this.investments.forEach( function(i) {i.spendFunds(totalSpent);});
 
-MemeplexSchema.methods.propagandaEvents = function() {}; // TODO
+    totalSpent = this.propaganda;
+    this.props.forEach( function(p) {p.spendFunds(totalSpent);});
+};
 
-MemeplexSchema.methods.investmentEvents = function() {}; // TODO
+MemeplexSchema.methods.propagandaEvents = function() {
+    this.props.forEach( function(p) {p.checkForEvents();});
+};
+
+MemeplexSchema.methods.completedInvestment = function(i) {
+    i.remove();
+    this.achieved.push(i);
+};
+
+MemeplexSchema.methods.investmentEvents = function() {
+    var mp = this;
+    this.investments.forEach( function(i) {
+        i.checkForEvents(function(inv) {mp.completedInvestment(inv);});
+    });
+};
 
 MemeplexSchema.methods.endQuarter = function() {
     // pay/collect interest
     // setup economy for coming turn
+    // update turn object
 };
 
 
